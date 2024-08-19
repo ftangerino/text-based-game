@@ -6,7 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.jogadores.jogador import Jogador
 from core.inimigos.inimigo import Inimigo
-from core.inimigos.enum_inimigos import EnumInimigos
+from core.inimigos.enumInimigos import EnumInimigos
 from collections import Counter
 
 jogador = Jogador(nome="Heroi", nivel=1, hp=120, mp=50, str=20, dex=15, int=10, def_=5, luk=12)
@@ -21,7 +21,7 @@ peso_inimigos = {
     EnumInimigos.ORC: 0.1
 }
 
-inimigos_aleatorios = random.choices(tipos_inimigos, weights=peso_inimigos.values(), k=10)
+inimigos_aleatorios = random.choices(tipos_inimigos, weights=peso_inimigos.values(), k=1)
 
 print(inimigos_aleatorios)
 inimigos = []

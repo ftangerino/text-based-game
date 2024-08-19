@@ -1,6 +1,7 @@
 # /src/core/jogador.py
 
 from ..entidade import Entidade
+import time
 
 class Jogador(Entidade):
     def __init__(self, nome, nivel, hp, mp, str, dex, int, def_, luk):
@@ -39,29 +40,42 @@ class Jogador(Entidade):
         print(playerItems)
 
     def mover(self):
-        esquerda = "esquerda"
+        esquerda = "esquerda" 
         direita = "direita"
         cima = "cima"
         descansar = "descansar"
+        mostrarStatus = "checar status"
         count = 0
         while True:
             count += 1
             if count == 100:
                 break
             print("""
-                Onde você deseja ir?
-                    Esquerda: 1
-                    Direita: 2
-                    Cima: 3
+____________________________________________________________________________________  
+                            
+                O que você deseja fazer?
+                Ações de Movimento:                 Ações de Descanso:
+                -   Ir para Esquerda               - Checar Status
+                -   Ir para Direita                - Descansar
+                -   Ir para Cima                   
+____________________________________________________________________________________
                 """ )
-            print(direcao := str(input("Digite a direção: ")))
-            if direcao == esquerda or direcao == direita or direcao == cima:
-                print(f"Você foi para {direcao}")
+            print("Digite a ação que deseja realizar:", end=" ")
+            print(acao := input().lower())
+            if acao == esquerda or acao == direita or acao == cima:
+                print(f"Você foi para {acao}")
                 break
-            elif direcao == descansar: 
+            elif acao == descansar: 
                 cura = self.hp * 0.1
                 self.setVida(self.hp + cura)
                 print(f"Você descansou e recuperou {cura} de vida")
-            else: print("Direção inválida")
+            elif acao == mostrarStatus:
+                print(self.toString())
+            else: print("""
+____________________________________________________________________________________  
+                            
 
+                        Digite o comando corretamente
 
+____________________________________________________________________________________
+                """ )

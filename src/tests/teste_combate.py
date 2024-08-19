@@ -26,7 +26,7 @@ peso_inimigos = {
 
 inimigos_aleatorios = random.choices(tipos_inimigos, weights=peso_inimigos.values(), k=10)
 
-print(inimigos_aleatorios)
+print(f"{inimigos_aleatorios}\n")
 contagem_inimigos = Counter(inimigos_aleatorios)
 print(contagem_inimigos)
 
