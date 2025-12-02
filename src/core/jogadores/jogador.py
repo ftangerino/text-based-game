@@ -1,6 +1,9 @@
 # /src/core/jogador.py
 
 from ..entidade import Entidade
+from .enumClasses import EnumClasses
+from magias.enumMagia import enumMagia
+from magias.enumTecnica import enumTecnica
 
 
 class Jogador(Entidade):
@@ -12,6 +15,10 @@ class Jogador(Entidade):
         self.mapa = mapa
         self.posicao = posicao_inicial
 
+        self.classe = None
+        self.habilidades = []
+        self._habilidades_para_desbloquear = []
+
         self.experiencia = 0
         self.proximo_nivel = self._calcular_experiencia_necessaria()
 
@@ -19,6 +26,17 @@ class Jogador(Entidade):
         self.icone = "❤"
 
         self.mapa.atualizar_posicao(*self.posicao, self.icone)
+
+    def definir_classe(self, classe: EnumClasses, stats=None):
+        self.classe = classe
+        if classe == EnumClasses.MAGO:
+            fila = [magia.criar_magia() for magia in sorted(enumMagia, key=lambda m: m.nivel_requerido)]
+        else:
+            fila = [tecnica.criar_tecnica() for tecnica in sorted(enumTecnica, key=lambda t: t.nivel_requerido)]
+
+        self._habilidades_para_desbloquear = fila
+        self.habilidades = []
+        self._desbloquear_habilidades_por_nivel(stats)
 
     def _calcular_experiencia_necessaria(self):
         return 100 + (self.nivel - 1) * 50
@@ -38,6 +56,44 @@ class Jogador(Entidade):
         self.def_ += 1
         self.luk += 1
 
+    def _desbloquear_habilidades_por_nivel(self, stats=None):
+        desbloqueadas = []
+        restantes = []
+
+        for habilidade in self._habilidades_para_desbloquear:
+            if self.nivel >= habilidade.nivel_requerido:
+                self.habilidades.append(habilidade)
+                desbloqueadas.append(habilidade.nome)
+            else:
+                restantes.append(habilidade)
+
+        self._habilidades_para_desbloquear = restantes
+
+        if stats is not None and desbloqueadas:
+            stats["habilidades_desbloqueadas"] += len(desbloqueadas)
+            print(f"✨ Novas habilidades: {', '.join(desbloqueadas)}")
+
+    def ataque_basico(self):
+        if self.classe == EnumClasses.MAGO:
+            return max(1, self.str // 2)
+        return max(1, self.str)
+
+    def usar_habilidade(self, indice, stats=None):
+        if not (0 <= indice < len(self.habilidades)):
+            return None, "Habilidade inválida."
+
+        habilidade = self.habilidades[indice]
+        if habilidade.custo > self.mp:
+            return None, "MP insuficiente para usar esta habilidade."
+
+        self.mp -= habilidade.custo
+        if stats is not None:
+            stats["habilidades_usadas"] += 1
+            if habilidade.tipo == "magia":
+                stats["magias_lancadas"] += 1
+
+        return habilidade, None
+
     def ganhar_experiencia(self, quantidade, stats=None):
         if quantidade <= 0:
             return
@@ -53,6 +109,7 @@ class Jogador(Entidade):
             if stats is not None:
                 stats["niveis_ganhos"] += 1
             self.proximo_nivel = self._calcular_experiencia_necessaria()
+            self._desbloquear_habilidades_por_nivel(stats)
             print(
                 f"⬆️  {self.nome} subiu para o nível {self.nivel}! "
                 f"HP Máximo: {self.vida_maxima}, STR: {self.str}, DEX: {self.dex}, INT: {self.int}, "

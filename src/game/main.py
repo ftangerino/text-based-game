@@ -125,6 +125,9 @@ def registrar_pontuacao(
                 "desvios": stats["desvios"],
                 "falhas_criticas_jogador": stats["falhas_criticas_jogador"],
                 "falhas_criticas_inimigos": stats["falhas_criticas_inimigos"],
+                "habilidades_usadas": stats["habilidades_usadas"],
+                "magias_lancadas": stats["magias_lancadas"],
+                "habilidades_desbloqueadas": stats["habilidades_desbloqueadas"],
             },
             "eventos": {
                 "baus_abertos": stats["baus_abertos"],
@@ -179,7 +182,7 @@ def executar_batalha(
             f"\n❤️ {jogador.nome}: {jogador.hp}/{jogador.vida_maxima} | "
             f"{inimigo.icone} {inimigo.nome}: {inimigo_hp}/{inimigo.hp}"
         )
-        op = input("[1] Atacar | [Sair] Fugir: ").lower()
+        op = input("[1] Ataque básico | [2] Habilidade | [Sair] Fugir: ").lower()
 
         if op == "sair":
             print("🏃 Você fugiu! O inimigo permanece no mapa.")
@@ -190,7 +193,28 @@ def executar_batalha(
             mapa.exibir_mapa()
             return "fugiu", 0, 0
 
-        if op != "1":
+        habilidade_usada = None
+        if op == "2":
+            if not jogador.habilidades:
+                print("Você ainda não possui habilidades desbloqueadas. Usando ataque básico.")
+            else:
+                print("\nEscolha uma habilidade:")
+                for idx, habilidade in enumerate(jogador.habilidades, start=1):
+                    print(
+                        f"[{idx}] {habilidade.nome} | Dano base: {habilidade.dano} | "
+                        f"Custo: {habilidade.custo} MP"
+                    )
+                escolha_habilidade = input("Opção: ")
+                if not escolha_habilidade.isdigit():
+                    print("Entrada inválida. Tente novamente.")
+                    continue
+                habilidade_indice = int(escolha_habilidade) - 1
+                habilidade_usada, erro = jogador.usar_habilidade(habilidade_indice, stats)
+                if erro:
+                    print(erro)
+                    continue
+
+        elif op != "1":
             print("Opção inválida.")
             continue
 
@@ -206,13 +230,23 @@ def executar_batalha(
             stats["falhas_criticas_jogador"] += 1
         elif rolagem <= chance_acerto:
             critico = eh_critico(jogador.luk)
-            dano = calcular_dano(jogador.str, inimigo.def_, critico)
-            inimigo_hp = max(0, inimigo_hp - dano)
-            mensagem_critico = " (CRÍTICO!)" if critico else ""
+            if habilidade_usada:
+                dano_base = habilidade_usada.calcular_dano(jogador)
+                defesa_ajustada = inimigo.def_ // (3 if habilidade_usada.tipo == "magia" else 2)
+                dano = max(1, dano_base - defesa_ajustada)
+                acao_texto = f"usou {habilidade_usada.nome}"
+            else:
+                dano = calcular_dano(jogador.ataque_basico(), inimigo.def_, False)
+                acao_texto = "atacou"
+
             if critico:
+                dano *= 2
                 stats["criticos_acertados"] += 1
+            mensagem_critico = " (CRÍTICO!)" if critico else ""
+
+            inimigo_hp = max(0, inimigo_hp - dano)
             print(
-                f"🗡️ Você atingiu o {inimigo.nome} causando {dano} de dano"
+                f"🗡️ Você {acao_texto} e causou {dano} de dano"
                 f"{mensagem_critico}."
             )
             print(f"💔 HP do {inimigo.nome}: {inimigo_hp}/{inimigo.hp}")
@@ -354,6 +388,9 @@ def main():
         "desvios": 0,
         "falhas_criticas_jogador": 0,
         "falhas_criticas_inimigos": 0,
+        "habilidades_usadas": 0,
+        "magias_lancadas": 0,
+        "habilidades_desbloqueadas": 0,
     }
 
     fases = [
@@ -376,7 +413,8 @@ def main():
 
     mapa = Mapa(LINHAS, COLUNAS)
     jogador = criar_jogador(nome, classe_escolhida, mapa)
-    jogador.nome_classe_original_key = classe_escolhida.name 
+    jogador.definir_classe(classe_escolhida, stats)
+    jogador.nome_classe_original_key = classe_escolhida.name
 
     pontos = 0
     
