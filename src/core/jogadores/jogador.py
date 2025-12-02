@@ -1,13 +1,25 @@
 # /src/core/jogador.py
 
 from ..entidade import Entidade
+import time
 
 class Jogador(Entidade):
-    def __init__(self, nome, nivel, hp, mp, str, dex, int, def_, luk):
+    def __init__(self, nome, nivel, hp, mp, str, dex, int, def_, luk, mapa, posicao_inicial=(0, 0)):
         super().__init__(0, nome, nivel, hp, mp, str, dex, int, def_, luk)
         self.consumiveis = []
         self.items = []
-    
+        self.hp = hp
+        self.vida_maxima = hp
+        self.mapa = mapa
+        self.posicao = posicao_inicial
+        self.mapa.atualizar_posicao(*self.posicao, "❤")  
+
+    def setVida(self, vida_atual):
+        if vida_atual > self.vida_maxima:
+            self.hp = self.vida_maxima
+        else:
+            self.hp = vida_atual
+        
     def pegarConsumivel(self, consumivel):
         self.consumiveis.append(consumivel)
 
@@ -29,3 +41,103 @@ class Jogador(Entidade):
 
         playerItems = "\n".join(todosItems)
         print(playerItems)
+
+    def mover_jogador_mapa(self):
+        movimentos = {
+            "esquerda": (0, -1),
+            "direita": (0, 1),
+            "cima": (-1, 0),
+            "baixo": (1, 0)
+        }
+        descansar = "descansar"
+        mostrar_status = "checar status"
+        print("""
+____________________________________________________________________________________  
+                        
+            O que você deseja fazer?
+            Ações de Movimento:                 Ações de Descanso:
+            -   Ir para Esquerda               - Checar Status
+            -   Ir para Direita                - Descansar
+            -   Ir para Cima                   
+____________________________________________________________________________________
+            """ )
+        while True:
+            acao = input("Digite a ação que deseja realizar: ").lower()
+            if acao in movimentos:
+                dx, dy = movimentos[acao]
+                novo_x = self.posicao[0] + dx
+                novo_y = self.posicao[1] + dy
+                if self.mapa.esta_dentro_limites(novo_x, novo_y):
+                    self.mapa.remover_posicao(*self.posicao)
+                    self.posicao = (novo_x, novo_y)
+                    self.mapa.atualizar_posicao(*self.posicao, "❤")
+                    print(f"Você se moveu para {acao}.")
+                    # print(f"\n aaaa{self.mapa.exibir_mapa()}")
+                    print("""
+        ____________________________________________________________________________________  
+                                    
+                        O que você deseja fazer?
+                        Ações de Movimento:                 Ações de Descanso:
+                        -   Ir para Esquerda               - Checar Status
+                        -   Ir para Direita                - Descansar
+                        -   Ir para Cima                   
+        ____________________________________________________________________________________
+                        """ )
+                    self.mapa.exibir_mapa()
+                    break
+                else:
+                    print("Movimento inválido! Fora dos limites do mapa.")
+            elif acao == descansar:
+                cura = self.hp * 0.1
+                self.setVida(self.hp + cura)
+                print(f"Você descansou e recuperou {cura} de vida.")
+                
+            elif acao == mostrar_status:
+                print(self.toString())
+                
+            else:
+                print("Comando inválido. Tente novamente.")
+
+
+    def mover(self):
+        # legacy -v
+        esquerda = "esquerda" 
+        direita = "direita"
+        cima = "cima"
+        descansar = "descansar"
+        mostrarStatus = "checar status"
+        count = 0
+        while True:
+            count += 1
+            if count == 100:
+                break
+            print("""
+____________________________________________________________________________________  
+                            
+                O que você deseja fazer?
+                Ações de Movimento:                 Ações de Descanso:
+                -   Ir para Esquerda               - Checar Status
+                -   Ir para Direita                - Descansar
+                -   Ir para Cima                   
+____________________________________________________________________________________
+                """ )
+            print("Digite a ação que deseja realizar:", end=" ")
+            acao = input().lower()
+            if acao in [esquerda, direita, cima]:
+                print(f"Você foi para {acao}")
+                break
+            elif acao == descansar: 
+                cura = self.hp * 0.1
+                self.setVida(self.hp + cura)
+                print(f"Você descansou e recuperou {cura} de vida")
+            elif acao == mostrarStatus:
+                print(self.toString())
+            else: 
+                print("""
+____________________________________________________________________________________  
+                            
+
+                        Digite o comando corretamente
+
+____________________________________________________________________________________
+                """ )

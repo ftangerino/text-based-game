@@ -2,6 +2,7 @@ from enum import Enum
 
 class EnumInimigos(Enum):
     GOBLIN = ("Goblin", 1, 50, 20, 15, 10, 5, 3, 8)
+    URSO = ("Urso", 1, 80, 30, 20, 15, 10, 5, 5)
     URUBU = ("Urubu", 1, 50, 20, 15, 10, 5, 3, 8)
     DRAGAO = ("Dragao", 1, 100, 100, 30, 20, 10, 10, 10)
     ORC = ("Orc", 1, 80, 50, 25, 15, 5, 5, 5)
