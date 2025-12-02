@@ -56,7 +56,12 @@ def criar_jogador(nome: str, classe: EnumClasses, mapa: Mapa) -> Jogador:
     jogador.icone = classe.icone 
     return jogador
 
-def gerar_inimigos_fase(configuracao: Dict[EnumInimigos, int], mapa: Mapa) -> List[EnumInimigos]:
+def gerar_inimigos_fase(
+    configuracao: Dict[EnumInimigos, int],
+    mapa: Mapa,
+    chefe_final: EnumInimigos | None = None,
+    posicao_chefe: Tuple[int, int] | None = None,
+) -> List[EnumInimigos]:
     inimigos = []
     for tipo, quantidade in configuracao.items():
         inimigos.extend([tipo for _ in range(quantidade)])
@@ -66,8 +71,17 @@ def gerar_inimigos_fase(configuracao: Dict[EnumInimigos, int], mapa: Mapa) -> Li
         while True:
             x, y = random.randint(0, LINHAS - 1), random.randint(0, COLUNAS - 1)
             if (x, y) != (0, 0) and mapa.obter_posicao(x, y) == ".":
-                mapa.adicionar_inimigo(x, y, inimigo) 
+                mapa.adicionar_inimigo(x, y, inimigo)
                 break
+
+    if chefe_final:
+        alvo_x, alvo_y = posicao_chefe if posicao_chefe else (LINHAS - 1, COLUNAS - 1)
+        while not mapa.esta_dentro_limites(alvo_x, alvo_y) or mapa.obter_posicao(alvo_x, alvo_y) != ".":
+            alvo_x, alvo_y = random.randint(0, LINHAS - 1), random.randint(0, COLUNAS - 1)
+
+        mapa.adicionar_inimigo(alvo_x, alvo_y, chefe_final)
+        inimigos.append(chefe_final)
+
     return inimigos
 
 def gerar_eventos_fase(quantidade: int, mapa: Mapa) -> Dict[Tuple[int, int], EnumEventos]:
@@ -393,23 +407,92 @@ def main():
         "habilidades_desbloqueadas": 0,
     }
 
-    fases = [
+    setups_de_fases = [
         {
-            "nome": "Fase 1 - Floresta Nebulosa",
-            "inimigos": {EnumInimigos.GOBLIN: 2, EnumInimigos.ZUMBI: 1},
-            "qtd_eventos": 2
+            "nome": "Trilha do Reino", 
+            "descricao": "Uma jornada clássica por planícies abertas, uma floresta viva e um castelo profano.",
+            "fases": [
+                {
+                    "nome": "Planície Dourada",
+                    "descricao": "Campos ensolarados onde bandidos e lobos espreitam viajantes.",
+                    "inimigos": {
+                        EnumInimigos.BANDIDO: 2,
+                        EnumInimigos.LOBO: 2,
+                        EnumInimigos.URUBU: 1,
+                    },
+                    "qtd_eventos": 2,
+                },
+                {
+                    "nome": "Floresta Ancestral",
+                    "descricao": "Bosque fechado guardado por goblins, aranhas e espíritos antigos.",
+                    "inimigos": {
+                        EnumInimigos.GOBLIN: 2,
+                        EnumInimigos.ARANHA: 2,
+                        EnumInimigos.TREANT: 1,
+                        EnumInimigos.ESPIRITO_FLORESTA: 1,
+                    },
+                    "qtd_eventos": 3,
+                },
+                {
+                    "nome": "Castelo Profano",
+                    "descricao": "Salões tomados por bruxas e cavaleiros corrompidos culminando em um Lich.",
+                    "inimigos": {
+                        EnumInimigos.ESQUELETO: 2,
+                        EnumInimigos.BRUXA: 1,
+                        EnumInimigos.CAVALEIRO_NEGRO: 1,
+                        EnumInimigos.FEITICEIRO_SOMBRIO: 1,
+                    },
+                    "qtd_eventos": 3,
+                    "chefe": EnumInimigos.LICH,
+                },
+            ],
         },
         {
-            "nome": "Fase 2 - Grutas Escuras",
-            "inimigos": {EnumInimigos.ORC: 2, EnumInimigos.GOBLIN: 1},
-            "qtd_eventos": 3
-        },
-        {
-            "nome": "Fase 3 - Ruínas Antigas",
-            "inimigos": {EnumInimigos.URSO: 1, EnumInimigos.ORC: 1, EnumInimigos.ZUMBI: 1},
-            "qtd_eventos": 3
+            "nome": "Rota das Cinzas",
+            "descricao": "Uma marcha por planícies arrasadas, floresta mística e um castelo demoníaco.",
+            "fases": [
+                {
+                    "nome": "Planície Ventosa",
+                    "descricao": "Terreno aberto com bandidos endurecidos e carcaças vigiadas por urubus.",
+                    "inimigos": {
+                        EnumInimigos.BANDIDO: 2,
+                        EnumInimigos.LOBO: 1,
+                        EnumInimigos.URSO: 1,
+                        EnumInimigos.URUBU: 1,
+                    },
+                    "qtd_eventos": 2,
+                },
+                {
+                    "nome": "Floresta Crepuscular",
+                    "descricao": "Mata cheia de espíritos, lobisomens e druidas torcidos pela magia.",
+                    "inimigos": {
+                        EnumInimigos.LOBISOMEM: 1,
+                        EnumInimigos.ESPIRITO_FLORESTA: 2,
+                        EnumInimigos.TREANT: 1,
+                        EnumInimigos.FEITICEIRO_SOMBRIO: 1,
+                    },
+                    "qtd_eventos": 3,
+                },
+                {
+                    "nome": "Castelo Infernal",
+                    "descricao": "Fortaleza ardente repleta de armaduras animadas e magia sombria até o grande demônio.",
+                    "inimigos": {
+                        EnumInimigos.ARMADURA_VIVA: 2,
+                        EnumInimigos.CAVALEIRO_NEGRO: 1,
+                        EnumInimigos.FEITICEIRO_SOMBRIO: 1,
+                    },
+                    "qtd_eventos": 3,
+                    "chefe": EnumInimigos.DEMONIO,
+                },
+            ],
         },
     ]
+
+    setup_escolhido = random.choice(setups_de_fases)
+    print(f"\n🌍 Caminho escolhido: {setup_escolhido['nome']}")
+    print(setup_escolhido["descricao"])
+
+    fases = setup_escolhido["fases"]
 
     mapa = Mapa(LINHAS, COLUNAS)
     jogador = criar_jogador(nome, classe_escolhida, mapa)
@@ -425,8 +508,15 @@ def main():
         
         mapa.atualizar_posicao(*jogador.posicao, classe_escolhida.icone)
 
-        inimigos_lista = gerar_inimigos_fase(fase["inimigos"], mapa)
+        inimigos_lista = gerar_inimigos_fase(
+            fase["inimigos"],
+            mapa,
+            chefe_final=fase.get("chefe"),
+        )
         eventos_dict = gerar_eventos_fase(fase["qtd_eventos"], mapa)
+
+        if "descricao" in fase:
+            print(f"{fase['descricao']}")
 
         pontos, jogador_vivo = jogar_fase(
             jogador, mapa, inimigos_lista, eventos_dict, fase["nome"], pontos, stats
