@@ -10,5 +10,45 @@
     "nome": "xikinho",
     "classe": "Guerreiro",
     "pontos": 184
+  },
+  {
+    "horario": "2025-12-02T16:55:28",
+    "nome": "julio",
+    "classe": "Mago",
+    "pontos": 248,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 74,
+      "passos_totais": 36,
+      "combate": {
+        "inimigos_derrotados": 9,
+        "fugas": 0
+      },
+      "eventos": {
+        "baus_abertos": 3,
+        "fontes_usadas": 0,
+        "charadas_acertadas": 1,
+        "charadas_erradas": 2
+      }
+    }
+  },
+  {
+    "horario": "2025-12-02T16:59:44",
+    "nome": "astolfo",
+    "classe": "Guerreiro",
+    "pontos": 0,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 57,
+      "passos_totais": 7,
+      "combate": {
+        "inimigos_derrotados": 0,
+        "fugas": 1
+      },
+      "eventos": {
+        "baus_abertos": 0,
+        "fontes_usadas": 0,
+        "charadas_acertadas": 0,
+        "charadas_erradas": 0
+      }
+    }
   }
 ]
