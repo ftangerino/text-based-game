@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class EnumClasses(Enum):
     # Note o emoji no final da tupla
     GUERREIRO = ("Guerreiro", 1, 100, 50, 30, 20, 10, 10, 5, "⚔️")

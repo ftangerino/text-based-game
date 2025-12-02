@@ -161,7 +161,7 @@ def executar_batalha(
     posicao_inimigo: Tuple[int, int],
     posicao_anterior: Tuple[int, int],
     stats: Dict,
-) -> Tuple[str, int]:
+) -> Tuple[str, int, int]:
     inimigo_hp = inimigo.hp
 
     while True:
@@ -178,7 +178,7 @@ def executar_batalha(
             mapa.atualizar_posicao(*posicao_anterior, jogador.icone)
             jogador.posicao = posicao_anterior
             mapa.exibir_mapa()
-            return "fugiu", 0
+            return "fugiu", 0, 0
 
         if op != "1":
             print("Opção inválida.")
@@ -211,7 +211,7 @@ def executar_batalha(
             stats["inimigos_derrotados"] += 1
             mapa.remover_inimigo(*posicao_inimigo)
             mapa.atualizar_posicao(*posicao_inimigo, jogador.icone)
-            return "vitoria", 10
+            return "vitoria", 10, inimigo.experiencia
 
         falha_critica_inimigo = random.random() < 0.05
         chance_acerto_inimigo = calcular_chance_acerto(inimigo.dex, jogador.def_, jogador.dex)
@@ -240,7 +240,7 @@ def executar_batalha(
         if jogador.hp <= 0:
             stats["mortes"] += 1
             print("💀 Você foi derrotado! A batalha terminou.")
-            return "derrota", 0
+            return "derrota", 0, 0
 
 def jogar_fase(
     jogador: Jogador,
@@ -266,12 +266,13 @@ def jogar_fase(
         if pos_jogador in mapa.inimigos:
             inimigo = mapa.inimigos[pos_jogador]
             print(f"\n{inimigo.icone} Você encontrou um {inimigo.nome}!")
-            resultado_batalha, pontos_batalha = executar_batalha(
+            resultado_batalha, pontos_batalha, experiencia = executar_batalha(
                 jogador, inimigo, mapa, pos_jogador, posicao_anterior, stats
             )
 
             if resultado_batalha == "vitoria":
                 pontos += pontos_batalha
+                jogador.ganhar_experiencia(experiencia)
                 inimigos.remove(inimigo)
             elif resultado_batalha == "derrota":
                 return pontos, False

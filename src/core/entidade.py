@@ -1,5 +1,6 @@
 # /src/core/entidade.py
 
+
 class Entidade:
     def __init__(self, id, nome, nivel, hp, mp, str, dex, int, def_, luk):
         self.id = id
@@ -14,4 +15,8 @@ class Entidade:
         self.luk = luk
 
     def toString(self):
-        return f"Nome: {self.nome} Nivel: {self.nivel}\nHP: {self.hp}\nMP: {self.mp}\nSTR: {self.str}\nDEX: {self.dex}\nINT: {self.int}\nDEF: {self.def_}\nLUK: {self.luk}"
+        return (
+            f"Nome: {self.nome} Nivel: {self.nivel}\n"
+            f"HP: {self.hp}\nMP: {self.mp}\nSTR: {self.str}\nDEX: {self.dex}\n"
+            f"INT: {self.int}\nDEF: {self.def_}\nLUK: {self.luk}"
+        )
