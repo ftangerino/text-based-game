@@ -96,7 +96,9 @@ def resolver_charada() -> bool:
     resposta = input("Sua resposta: ").lower().strip()
     return resposta == resposta_certa
 
-def registrar_pontuacao(nome: str, classe: EnumClasses, pontos: int, stats: Dict) -> None:
+def registrar_pontuacao(
+    nome: str, classe: EnumClasses, pontos: int, stats: Dict, jogador: Jogador
+) -> None:
     data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
     os.makedirs(data_dir, exist_ok=True)
     placar_path = os.path.join(data_dir, "scores.json")
@@ -112,9 +114,17 @@ def registrar_pontuacao(nome: str, classe: EnumClasses, pontos: int, stats: Dict
             "tempo_sessao_segundos": int(tempo_total),
             "passos_totais": stats["passos_dados"],
             "descansos_realizados": stats["descansos"], # Nova métrica
+            "nivel_final": jogador.nivel,
+            "experiencia_total_ganha": stats["experiencia_ganha"],
+            "niveis_ganhos": stats["niveis_ganhos"],
             "combate": {
                 "inimigos_derrotados": stats["inimigos_derrotados"],
-                "fugas": stats["fugas"]
+                "fugas": stats["fugas"],
+                "criticos_acertados": stats["criticos_acertados"],
+                "criticos_sofridos": stats["criticos_sofridos"],
+                "desvios": stats["desvios"],
+                "falhas_criticas_jogador": stats["falhas_criticas_jogador"],
+                "falhas_criticas_inimigos": stats["falhas_criticas_inimigos"],
             },
             "eventos": {
                 "baus_abertos": stats["baus_abertos"],
@@ -193,11 +203,14 @@ def executar_batalha(
             jogador.hp = max(0, jogador.hp - auto_dano)
             print(f"❌ Falha crítica! Você se machucou e perdeu {auto_dano} de HP.")
             print(f"❤️ HP do jogador: {jogador.hp}/{jogador.vida_maxima}")
+            stats["falhas_criticas_jogador"] += 1
         elif rolagem <= chance_acerto:
             critico = eh_critico(jogador.luk)
             dano = calcular_dano(jogador.str, inimigo.def_, critico)
             inimigo_hp = max(0, inimigo_hp - dano)
             mensagem_critico = " (CRÍTICO!)" if critico else ""
+            if critico:
+                stats["criticos_acertados"] += 1
             print(
                 f"🗡️ Você atingiu o {inimigo.nome} causando {dano} de dano"
                 f"{mensagem_critico}."
@@ -224,11 +237,14 @@ def executar_batalha(
                 f"✅ Falha crítica do inimigo! Ele se machucou e perdeu {auto_dano} de HP."
             )
             print(f"💔 HP do {inimigo.nome}: {inimigo_hp}/{inimigo.hp}")
+            stats["falhas_criticas_inimigos"] += 1
         elif rolagem_inimigo <= chance_acerto_inimigo:
             critico_inimigo = eh_critico(inimigo.luk)
             dano_inimigo = calcular_dano(inimigo.str, jogador.def_, critico_inimigo)
             jogador.hp = max(0, jogador.hp - dano_inimigo)
             mensagem_critico = " (CRÍTICO!)" if critico_inimigo else ""
+            if critico_inimigo:
+                stats["criticos_sofridos"] += 1
             print(
                 f"⚔️ {inimigo.nome} atacou e causou {dano_inimigo} de dano"
                 f"{mensagem_critico}."
@@ -236,6 +252,7 @@ def executar_batalha(
             print(f"❤️ HP do jogador: {jogador.hp}/{jogador.vida_maxima}")
         else:
             print(f"🛡️ Você evitou o golpe do {inimigo.nome}!")
+            stats["desvios"] += 1
 
         if jogador.hp <= 0:
             stats["mortes"] += 1
@@ -272,7 +289,7 @@ def jogar_fase(
 
             if resultado_batalha == "vitoria":
                 pontos += pontos_batalha
-                jogador.ganhar_experiencia(experiencia)
+                jogador.ganhar_experiencia(experiencia, stats)
                 inimigos.remove(inimigo)
             elif resultado_batalha == "derrota":
                 return pontos, False
@@ -329,7 +346,14 @@ def main():
         "baus_abertos": 0,
         "fontes_usadas": 0,
         "charadas_acertadas": 0,
-        "charadas_erradas": 0
+        "charadas_erradas": 0,
+        "experiencia_ganha": 0,
+        "niveis_ganhos": 0,
+        "criticos_acertados": 0,
+        "criticos_sofridos": 0,
+        "desvios": 0,
+        "falhas_criticas_jogador": 0,
+        "falhas_criticas_inimigos": 0,
     }
 
     fases = [
@@ -375,15 +399,15 @@ def main():
             print(f"{nome.upper()} foi derrotado na {fase['nome']}.")
             print(f"Pontuação Final: {pontos}")
             print("-" * 50)
-            registrar_pontuacao(nome, classe_escolhida, pontos, stats)
+            registrar_pontuacao(nome, classe_escolhida, pontos, stats, jogador)
             return
 
     print("-" * 50)
     print(f"PARABÉNS, {nome.upper()}!")
     print(f"Pontuação Final: {pontos}")
     print("-" * 50)
-    
-    registrar_pontuacao(nome, classe_escolhida, pontos, stats)
+
+    registrar_pontuacao(nome, classe_escolhida, pontos, stats, jogador)
 
 if __name__ == "__main__":
     main()

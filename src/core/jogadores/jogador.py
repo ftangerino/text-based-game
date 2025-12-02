@@ -38,16 +38,20 @@ class Jogador(Entidade):
         self.def_ += 1
         self.luk += 1
 
-    def ganhar_experiencia(self, quantidade):
+    def ganhar_experiencia(self, quantidade, stats=None):
         if quantidade <= 0:
             return
 
         self.experiencia += quantidade
+        if stats is not None:
+            stats["experiencia_ganha"] += quantidade
         print(f"✨ Você ganhou {quantidade} de experiência. (Total: {self.experiencia}/{self.proximo_nivel})")
 
         while self.experiencia >= self.proximo_nivel:
             self.experiencia -= self.proximo_nivel
             self._aplicar_bonus_nivel()
+            if stats is not None:
+                stats["niveis_ganhos"] += 1
             self.proximo_nivel = self._calcular_experiencia_necessaria()
             print(
                 f"⬆️  {self.nome} subiu para o nível {self.nivel}! "
