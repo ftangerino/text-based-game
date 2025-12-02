@@ -1,29 +1,67 @@
 # /src/core/jogador.py
 
 from ..entidade import Entidade
-import time
+
 
 class Jogador(Entidade):
     def __init__(self, nome, nivel, hp, mp, str, dex, int, def_, luk, mapa, posicao_inicial=(0, 0)):
         super().__init__(0, nome, nivel, hp, mp, str, dex, int, def_, luk)
         self.consumiveis = []
         self.items = []
-        self.hp = hp
         self.vida_maxima = hp
         self.mapa = mapa
         self.posicao = posicao_inicial
-        
+
+        self.experiencia = 0
+        self.proximo_nivel = self._calcular_experiencia_necessaria()
+
         # Define um ícone padrão
-        self.icone = "❤" 
-        
-        self.mapa.atualizar_posicao(*self.posicao, self.icone)  
+        self.icone = "❤"
+
+        self.mapa.atualizar_posicao(*self.posicao, self.icone)
+
+    def _calcular_experiencia_necessaria(self):
+        return 100 + (self.nivel - 1) * 50
+
+    def _aplicar_bonus_nivel(self):
+        incremento_hp = 10
+        incremento_mp = 5
+        incremento_atributos = 2
+
+        self.nivel += 1
+        self.vida_maxima += incremento_hp
+        self.hp = self.vida_maxima
+        self.mp += incremento_mp
+        self.str += incremento_atributos
+        self.dex += incremento_atributos
+        self.int += incremento_atributos
+        self.def_ += 1
+        self.luk += 1
+
+    def ganhar_experiencia(self, quantidade):
+        if quantidade <= 0:
+            return
+
+        self.experiencia += quantidade
+        print(f"✨ Você ganhou {quantidade} de experiência. (Total: {self.experiencia}/{self.proximo_nivel})")
+
+        while self.experiencia >= self.proximo_nivel:
+            self.experiencia -= self.proximo_nivel
+            self._aplicar_bonus_nivel()
+            self.proximo_nivel = self._calcular_experiencia_necessaria()
+            print(
+                f"⬆️  {self.nome} subiu para o nível {self.nivel}! "
+                f"HP Máximo: {self.vida_maxima}, STR: {self.str}, DEX: {self.dex}, INT: {self.int}, "
+                f"DEF: {self.def_}, LUK: {self.luk}"
+            )
+            print(f"Próximo nível em {self.proximo_nivel - self.experiencia} de XP.")
 
     def setVida(self, vida_atual):
         if vida_atual > self.vida_maxima:
             self.hp = self.vida_maxima
         else:
             self.hp = vida_atual
-        
+
     def pegarConsumivel(self, consumivel):
         self.consumiveis.append(consumivel)
 
@@ -36,7 +74,7 @@ class Jogador(Entidade):
         for consumivel in self.consumiveis:
             if consumivel.nome in consumiveis_to_dict:
                 consumiveis_to_dict[consumivel.nome] += 1
-            else:  
+            else:
                 consumiveis_to_dict[consumivel.nome] = 1
 
         todosItems = ["Items:\n"]
@@ -57,13 +95,13 @@ class Jogador(Entidade):
         descansar = "descansar"
         mostrar_status = "checar status"
         print("""
-____________________________________________________________________________________  
-                        
+____________________________________________________________________________________
+
             O que você deseja fazer?
             Ações de Movimento:                 Ações de Descanso:
             -   Ir para Esquerda               - Checar Status
             -   Ir para Direita                - Descansar
-            -   Ir para Cima                   
+            -   Ir para Cima
 ____________________________________________________________________________________
             """ )
         while True:
@@ -78,40 +116,40 @@ ________________________________________________________________________________
                     self.mapa.atualizar_posicao(*self.posicao, self.icone)
                     print(f"Você se moveu para {acao}.")
                     print("""
-        ____________________________________________________________________________________  
-                                            
+        ____________________________________________________________________________________
+
                         O que você deseja fazer?
                         Ações de Movimento:                 Ações de Descanso:
                         -   Ir para Esquerda               - Checar Status
                         -   Ir para Direita                - Descansar
-                        -   Ir para Cima                   
+                        -   Ir para Cima
         ____________________________________________________________________________________
                         """ )
                     self.mapa.exibir_mapa()
                     break
                 else:
                     print("Movimento inválido! Fora dos limites do mapa.")
-            
+
             elif acao == descansar:
                 cura = int(self.vida_maxima * 0.1) # Converti para int para ficar bonito
                 self.setVida(self.hp + cura)
-                
+
                 # ALTERAÇÃO AQUI: Contabiliza o descanso se stats foi passado
                 if stats is not None:
                     stats["descansos"] += 1
-                    
+
                 print(f"Você descansou e recuperou {cura} de vida.")
-                
+
             elif acao == mostrar_status:
                 print(self.toString())
-                
+
             else:
                 print("Comando inválido. Tente novamente.")
 
 
     def mover(self):
         # legacy -v
-        esquerda = "esquerda" 
+        esquerda = "esquerda"
         direita = "direita"
         cima = "cima"
         descansar = "descansar"
@@ -122,13 +160,13 @@ ________________________________________________________________________________
             if count == 100:
                 break
             print("""
-____________________________________________________________________________________  
-                            
+____________________________________________________________________________________
+
                 O que você deseja fazer?
                 Ações de Movimento:                 Ações de Descanso:
                 -   Ir para Esquerda               - Checar Status
                 -   Ir para Direita                - Descansar
-                -   Ir para Cima                   
+                -   Ir para Cima
 ____________________________________________________________________________________
                 """ )
             print("Digite a ação que deseja realizar:", end=" ")
@@ -136,24 +174,27 @@ ________________________________________________________________________________
             if acao in [esquerda, direita, cima]:
                 print(f"Você foi para {acao}")
                 break
-            elif acao == descansar: 
+            elif acao == descansar:
                 cura = self.hp * 0.1
                 self.setVida(self.hp + cura)
                 print(f"Você descansou e recuperou {cura} de vida")
             elif acao == mostrarStatus:
                 print(self.toString())
-            else: 
+            else:
                 print("""
-____________________________________________________________________________________  
-                            
+____________________________________________________________________________________
+
 
                         Digite o comando corretamente
 
 ____________________________________________________________________________________
                 """ )
-            
+
     def toString(self):
-        return (f"🛡️  {self.nome} (Lvl {self.nivel})\n"
-                f"❤️  HP: {self.hp}/{self.vida_maxima} | 💧 MP: {self.mp}\n"
-                f"💪 STR: {self.str} | 🎯 DEX: {self.dex} | 🧠 INT: {self.int}\n"
-                f"🛡️ DEF: {self.def_} | 🍀 LUK: {self.luk}")
+        return (
+            f"🛡️  {self.nome} (Lvl {self.nivel})\n"
+            f"❤️  HP: {self.hp}/{self.vida_maxima} | 💧 MP: {self.mp}\n"
+            f"✨ XP: {self.experiencia}/{self.proximo_nivel}\n"
+            f"💪 STR: {self.str} | 🎯 DEX: {self.dex} | 🧠 INT: {self.int}\n"
+            f"🛡️ DEF: {self.def_} | 🍀 LUK: {self.luk}"
+        )
