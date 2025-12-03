@@ -1,3 +1,16 @@
+###################################################################################################
+# 📥 IMPORTS | CODING: UTF-8
+###################################################################################################
+# ✅ → Discussed and realized
+# 🟢 → Discussed and not realized (to be done after the meeting)
+# 🟡 → Little important and not discussed (unhindered)
+# 🔴 → Very important and not discussed (hindered)
+# ❌ → Canceled
+# ⚪ → Postponed (technical debit)
+###################################################################################################
+# -------------------------------------------------------------------------------------------------
+# 🔰 PILHA DE IMPORTS (BASE DO LOOP DE JOGO)
+# -------------------------------------------------------------------------------------------------
 import sys
 import json
 import os
@@ -14,13 +27,16 @@ from core.jogadores.jogador import Jogador
 from core.inimigos.enumInimigos import EnumInimigos
 from core.jogadores.enumClasses import EnumClasses
 from core.mapa.mapa import Mapa
-from core.mapa.enumEventos import EnumEventos 
+from core.mapa.enumEventos import EnumEventos
 
-# Configurações Globais
+###################################################################################################
+# 📃 PARÂMETROS GLOBAIS
+###################################################################################################
+# ✅ Tamanho padrão do tabuleiro e opções de conexão.
 LINHAS = 5
 COLUNAS = 5
 
-# Config DB Postgres
+# 🔴 Ajuste as credenciais conforme o ambiente ou via variáveis de ambiente.
 DB_CONFIG = {
     "host": "164.68.104.247",
     "user": "francisco",
@@ -29,7 +45,11 @@ DB_CONFIG = {
 }
 
 
+###################################################################################################
+# 🧭 FLUXO DE ENTRADA DO JOGADOR
+###################################################################################################
 def solicitar_nome() -> str:
+    """Solicita um nome não vazio para o personagem principal."""
     while True:
         nome = input("Digite o nome do seu personagem: ").strip()
         if nome:
@@ -38,6 +58,7 @@ def solicitar_nome() -> str:
 
 
 def escolher_classe() -> EnumClasses:
+    """Apresenta as classes disponíveis e retorna a escolha do usuário."""
     print("\nEscolha uma classe:")
     for idx, classe in enumerate(EnumClasses, start=1):
         print(f"{idx}. {classe.nome} {classe.icone}")
@@ -52,6 +73,7 @@ def escolher_classe() -> EnumClasses:
 
 
 def criar_jogador(nome: str, classe: EnumClasses, mapa: Mapa) -> Jogador:
+    """Instancia um jogador com ícone e vida máxima inicial alinhados à classe."""
     jogador = Jogador(
         nome=nome,
         nivel=classe.nivel,
@@ -70,12 +92,16 @@ def criar_jogador(nome: str, classe: EnumClasses, mapa: Mapa) -> Jogador:
     return jogador
 
 
+###################################################################################################
+# 🎲 GERAÇÃO PROCEDURAL DE FASES
+###################################################################################################
 def gerar_inimigos_fase(
     configuracao: Dict[EnumInimigos, int],
     mapa: Mapa,
     chefe_final: EnumInimigos | None = None,
     posicao_chefe: Tuple[int, int] | None = None,
 ) -> List[EnumInimigos]:
+    """Sorteia posições no mapa e posiciona inimigos comuns e chefe da fase."""
     inimigos = []
     for tipo, quantidade in configuracao.items():
         inimigos.extend([tipo for _ in range(quantidade)])
@@ -100,6 +126,7 @@ def gerar_inimigos_fase(
 
 
 def gerar_eventos_fase(quantidade: int, mapa: Mapa) -> Dict[Tuple[int, int], EnumEventos]:
+    """Distribui eventos aleatórios garantindo que não se sobreponham no grid."""
     eventos_ativos = {}
     tipos_eventos = [EnumEventos.FONTE_CURA, EnumEventos.CHARADA, EnumEventos.BAU_TESOURO]
 
@@ -115,6 +142,7 @@ def gerar_eventos_fase(quantidade: int, mapa: Mapa) -> Dict[Tuple[int, int], Enu
 
 
 def resolver_charada() -> bool:
+    """Apresenta uma charada aleatória e retorna True se o jogador acertar."""
     charadas = [
         ("O que é, o que é? Cai em pé e corre deitado?", "chuva"),
         ("O que é, o que é? Tem cabeça e tem dente, não é bicho e nem é gente?", "alho"),
@@ -127,12 +155,13 @@ def resolver_charada() -> bool:
     return resposta == resposta_certa
 
 
+###################################################################################################
+# 📊 PERSISTÊNCIA E MÉTRICAS
+###################################################################################################
 def registrar_pontuacao(
     nome: str, classe: EnumClasses, pontos: int, stats: Dict, jogador: Jogador
 ) -> None:
-    """
-    Continua salvando no scores.json como log histórico local.
-    """
+    """Salva um snapshot local em JSON para manter um histórico offline."""
     data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
     os.makedirs(data_dir, exist_ok=True)
     placar_path = os.path.join(data_dir, "scores.json")
@@ -369,18 +398,24 @@ def salvar_progresso_db(
             conn.close()
 
 
+###################################################################################################
+# ⚔️ MECÂNICAS DE COMBATE
+###################################################################################################
 def calcular_chance_acerto(atacante_dex: int, defesa_defensor: int, evasao_defensor: int) -> float:
+    """Calcula chance de acerto ponderando destreza do atacante e defesa do alvo."""
     defesa = (defesa_defensor + evasao_defensor) / 2
     chance = 0.7 + (atacante_dex - defesa) * 0.01
     return max(0.1, min(0.95, chance))
 
 
 def eh_critico(luk_atacante: int) -> bool:
+    """Determina se o ataque será crítico com base na sorte do atacante."""
     chance_critico = min(0.5, 0.05 + luk_atacante / 100)
     return random.random() < chance_critico
 
 
 def calcular_dano(str_atacante: int, def_defensor: int, critico: bool) -> int:
+    """Gera dano final a partir da força, defesa e flag de crítico."""
     dano_base = max(1, str_atacante - def_defensor)
     return dano_base * 2 if critico else dano_base
 
@@ -393,6 +428,7 @@ def executar_batalha(
     posicao_anterior: Tuple[int, int],
     stats: Dict,
 ) -> Tuple[str, int, int]:
+    """Resolve uma batalha por turnos e devolve status, pontos e XP ganhos."""
     inimigo_hp = inimigo.hp
 
     while True:
@@ -521,6 +557,7 @@ def jogar_fase(
     pontos: int,
     stats: Dict,
 ) -> Tuple[int, bool]:
+    """Executa movimentação, combate e eventos até concluir a fase ou o jogador cair."""
     print(f"\n=== Iniciando {nome_fase}! ===")
     mapa.exibir_mapa()
 
@@ -584,6 +621,9 @@ def jogar_fase(
     return pontos + 20, True
 
 
+###################################################################################################
+# 🧭 LOOP PRINCIPAL E CAMPANHAS
+###################################################################################################
 def main():
     print("=== RPG PYTHON: EDIÇÃO BI ANALYTICS ===")
     nome = solicitar_nome()

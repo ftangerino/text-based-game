@@ -1,5 +1,16 @@
-# /src/core/jogador.py
-
+###################################################################################################
+# 📥 IMPORTS | CODING: UTF-8
+###################################################################################################
+# ✅ → Discussed and realized
+# 🟢 → Discussed and not realized (to be done after the meeting)
+# 🟡 → Little important and not discussed (unhindered)
+# 🔴 → Very important and not discussed (hindered)
+# ❌ → Canceled
+# ⚪ → Postponed (technical debit)
+###################################################################################################
+# -------------------------------------------------------------------------------------------------
+# 🧭 DEFINIÇÃO DE JOGADOR E HABILIDADES
+# -------------------------------------------------------------------------------------------------
 from ..entidade import Entidade
 from .enumClasses import EnumClasses
 from magias.enumMagia import enumMagia
@@ -7,6 +18,7 @@ from magias.enumTecnica import enumTecnica
 
 
 class Jogador(Entidade):
+    """Representa o personagem controlado pelo usuário e suas interações básicas."""
     def __init__(self, nome, nivel, hp, mp, str, dex, int, def_, luk, mapa, posicao_inicial=(0, 0)):
         super().__init__(0, nome, nivel, hp, mp, str, dex, int, def_, luk)
         self.consumiveis = []
@@ -27,7 +39,12 @@ class Jogador(Entidade):
 
         self.mapa.atualizar_posicao(*self.posicao, self.icone)
 
+    ###################################################################################################
+    # 🎯 PROGRESSÃO E HABILIDADES
+    ###################################################################################################
+
     def definir_classe(self, classe: EnumClasses, stats=None):
+        """Configura classe escolhida e popula fila de habilidades conforme nível."""
         self.classe = classe
         if classe == EnumClasses.MAGO:
             fila = [magia.criar_magia() for magia in sorted(enumMagia, key=lambda m: m.nivel_requerido)]
@@ -74,11 +91,13 @@ class Jogador(Entidade):
             print(f"✨ Novas habilidades: {', '.join(desbloqueadas)}")
 
     def ataque_basico(self):
+        """Ataque padrão varia conforme a classe, devolvendo pelo menos 1 de dano base."""
         if self.classe == EnumClasses.MAGO:
             return max(1, self.str // 2)
         return max(1, self.str)
 
     def usar_habilidade(self, indice, stats=None):
+        """Tenta executar uma habilidade pela posição na lista e atualiza métricas."""
         if not (0 <= indice < len(self.habilidades)):
             return None, "Habilidade inválida."
 
@@ -95,6 +114,7 @@ class Jogador(Entidade):
         return habilidade, None
 
     def ganhar_experiencia(self, quantidade, stats=None):
+        """Entrega experiência, níveis e desbloqueio automático conforme progressão."""
         if quantidade <= 0:
             return
 
@@ -145,8 +165,12 @@ class Jogador(Entidade):
         playerItems = "\n".join(todosItems)
         print(playerItems)
 
+    ###################################################################################################
+    # 🧭 MOVIMENTAÇÃO E INTERAÇÃO
+    ###################################################################################################
     # ALTERAÇÃO AQUI: Adicionado parametro stats=None
     def mover_jogador_mapa(self, stats=None):
+        """Recebe comando textual, move o jogador e contabiliza métricas de descanso."""
         movimentos = {
             "esquerda": (0, -1),
             "direita": (0, 1),
