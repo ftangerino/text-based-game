@@ -1,78 +1,5 @@
 [
   {
-    "horario": "2025-12-02T16:35:30",
-    "nome": "francisco",
-    "classe": "Guerreiro",
-    "pontos": 150
-  },
-  {
-    "horario": "2025-12-02T16:50:19",
-    "nome": "xikinho",
-    "classe": "Guerreiro",
-    "pontos": 184
-  },
-  {
-    "horario": "2025-12-02T16:55:28",
-    "nome": "julio",
-    "classe": "Mago",
-    "pontos": 248,
-    "metricas_bi": {
-      "tempo_sessao_segundos": 74,
-      "passos_totais": 36,
-      "combate": {
-        "inimigos_derrotados": 9,
-        "fugas": 0
-      },
-      "eventos": {
-        "baus_abertos": 3,
-        "fontes_usadas": 0,
-        "charadas_acertadas": 1,
-        "charadas_erradas": 2
-      }
-    }
-  },
-  {
-    "horario": "2025-12-02T16:59:44",
-    "nome": "astolfo",
-    "classe": "Guerreiro",
-    "pontos": 0,
-    "metricas_bi": {
-      "tempo_sessao_segundos": 57,
-      "passos_totais": 7,
-      "combate": {
-        "inimigos_derrotados": 0,
-        "fugas": 1
-      },
-      "eventos": {
-        "baus_abertos": 0,
-        "fontes_usadas": 0,
-        "charadas_acertadas": 0,
-        "charadas_erradas": 0
-      }
-    }
-  },
-  {
-    "horario": "2025-12-02T19:51:01",
-    "nome": "Jumanji",
-    "classe": "Guerreiro",
-    "pontos": 186,
-    "metricas_bi": {
-      "tempo_sessao_segundos": 193,
-      "passos_totais": 40,
-      "descansos_realizados": 7,
-      "combate": {
-        "inimigos_derrotados": 9,
-        "fugas": 0
-      },
-      "eventos": {
-        "baus_abertos": 1,
-        "fontes_usadas": 4,
-        "charadas_acertadas": 0,
-        "charadas_erradas": 1
-      }
-    }
-  },
-  {
     "horario": "2025-12-02T20:19:00",
     "nome": "Astevaldo",
     "classe": "Guerreiro",
@@ -163,6 +90,486 @@
       "eventos": {
         "baus_abertos": 3,
         "fontes_usadas": 0,
+        "charadas_acertadas": 1,
+        "charadas_erradas": 1
+      }
+    }
+  },
+  {
+    "horario": "2025-12-02T18:05:12",
+    "nome": "Conan",
+    "classe": "Guerreiro",
+    "pontos": 260,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 320,
+      "passos_totais": 40,
+      "descansos_realizados": 3,
+      "nivel_final": 3,
+      "experiencia_total_ganha": 310,
+      "niveis_ganhos": 2,
+      "combate": {
+        "inimigos_derrotados": 12,
+        "fugas": 1,
+        "criticos_acertados": 4,
+        "criticos_sofridos": 3,
+        "desvios": 8,
+        "falhas_criticas_jogador": 2,
+        "falhas_criticas_inimigos": 4,
+        "habilidades_usadas": 14,
+        "magias_lancadas": 0,
+        "habilidades_desbloqueadas": 3
+      },
+      "eventos": {
+        "baus_abertos": 2,
+        "fontes_usadas": 1,
+        "charadas_acertadas": 1,
+        "charadas_erradas": 0
+      }
+    }
+  },
+  {
+    "horario": "2025-12-02T18:12:47",
+    "nome": "Lyria",
+    "classe": "Mago",
+    "pontos": 180,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 290,
+      "passos_totais": 27,
+      "descansos_realizados": 1,
+      "nivel_final": 2,
+      "experiencia_total_ganha": 220,
+      "niveis_ganhos": 1,
+      "combate": {
+        "inimigos_derrotados": 7,
+        "fugas": 0,
+        "criticos_acertados": 3,
+        "criticos_sofridos": 2,
+        "desvios": 5,
+        "falhas_criticas_jogador": 1,
+        "falhas_criticas_inimigos": 2,
+        "habilidades_usadas": 10,
+        "magias_lancadas": 7,
+        "habilidades_desbloqueadas": 2
+      },
+      "eventos": {
+        "baus_abertos": 1,
+        "fontes_usadas": 1,
+        "charadas_acertadas": 0,
+        "charadas_erradas": 1
+      }
+    }
+  },
+  {
+    "horario": "2025-12-02T18:20:33",
+    "nome": "Thorgar",
+    "classe": "Guerreiro",
+    "pontos": 150,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 210,
+      "passos_totais": 25,
+      "descansos_realizados": 0,
+      "nivel_final": 2,
+      "experiencia_total_ganha": 170,
+      "niveis_ganhos": 1,
+      "combate": {
+        "inimigos_derrotados": 8,
+        "fugas": 2,
+        "criticos_acertados": 2,
+        "criticos_sofridos": 4,
+        "desvios": 6,
+        "falhas_criticas_jogador": 1,
+        "falhas_criticas_inimigos": 3,
+        "habilidades_usadas": 11,
+        "magias_lancadas": 0,
+        "habilidades_desbloqueadas": 1
+      },
+      "eventos": {
+        "baus_abertos": 1,
+        "fontes_usadas": 0,
+        "charadas_acertadas": 0,
+        "charadas_erradas": 0
+      }
+    }
+  },
+  {
+    "horario": "2025-12-02T18:29:05",
+    "nome": "Elowen",
+    "classe": "Mago",
+    "pontos": 95,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 180,
+      "passos_totais": 14,
+      "descansos_realizados": 0,
+      "nivel_final": 1,
+      "experiencia_total_ganha": 90,
+      "niveis_ganhos": 0,
+      "combate": {
+        "inimigos_derrotados": 3,
+        "fugas": 0,
+        "criticos_acertados": 1,
+        "criticos_sofridos": 1,
+        "desvios": 2,
+        "falhas_criticas_jogador": 0,
+        "falhas_criticas_inimigos": 1,
+        "habilidades_usadas": 6,
+        "magias_lancadas": 5,
+        "habilidades_desbloqueadas": 1
+      },
+      "eventos": {
+        "baus_abertos": 1,
+        "fontes_usadas": 0,
+        "charadas_acertadas": 0,
+        "charadas_erradas": 0
+      }
+    }
+  },
+  {
+    "horario": "2025-12-02T18:37:42",
+    "nome": "Ragnar",
+    "classe": "Guerreiro",
+    "pontos": 230,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 340,
+      "passos_totais": 39,
+      "descansos_realizados": 4,
+      "nivel_final": 3,
+      "experiencia_total_ganha": 280,
+      "niveis_ganhos": 2,
+      "combate": {
+        "inimigos_derrotados": 10,
+        "fugas": 1,
+        "criticos_acertados": 5,
+        "criticos_sofridos": 3,
+        "desvios": 9,
+        "falhas_criticas_jogador": 2,
+        "falhas_criticas_inimigos": 2,
+        "habilidades_usadas": 15,
+        "magias_lancadas": 0,
+        "habilidades_desbloqueadas": 2
+      },
+      "eventos": {
+        "baus_abertos": 2,
+        "fontes_usadas": 0,
+        "charadas_acertadas": 1,
+        "charadas_erradas": 1
+      }
+    }
+  },
+  {
+    "horario": "2025-12-02T18:45:59",
+    "nome": "Seraphina",
+    "classe": "Mago",
+    "pontos": 205,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 310,
+      "passos_totais": 32,
+      "descansos_realizados": 2,
+      "nivel_final": 2,
+      "experiencia_total_ganha": 250,
+      "niveis_ganhos": 1,
+      "combate": {
+        "inimigos_derrotados": 9,
+        "fugas": 0,
+        "criticos_acertados": 4,
+        "criticos_sofridos": 2,
+        "desvios": 7,
+        "falhas_criticas_jogador": 1,
+        "falhas_criticas_inimigos": 3,
+        "habilidades_usadas": 13,
+        "magias_lancadas": 9,
+        "habilidades_desbloqueadas": 2
+      },
+      "eventos": {
+        "baus_abertos": 2,
+        "fontes_usadas": 1,
+        "charadas_acertadas": 0,
+        "charadas_erradas": 1
+      }
+    }
+  },
+  {
+    "horario": "2025-12-02T18:54:21",
+    "nome": "Baldur",
+    "classe": "Guerreiro",
+    "pontos": 120,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 200,
+      "passos_totais": 22,
+      "descansos_realizados": 0,
+      "nivel_final": 2,
+      "experiencia_total_ganha": 150,
+      "niveis_ganhos": 1,
+      "combate": {
+        "inimigos_derrotados": 6,
+        "fugas": 1,
+        "criticos_acertados": 2,
+        "criticos_sofridos": 2,
+        "desvios": 4,
+        "falhas_criticas_jogador": 1,
+        "falhas_criticas_inimigos": 2,
+        "habilidades_usadas": 9,
+        "magias_lancadas": 0,
+        "habilidades_desbloqueadas": 1
+      },
+      "eventos": {
+        "baus_abertos": 1,
+        "fontes_usadas": 0,
+        "charadas_acertadas": 0,
+        "charadas_erradas": 0
+      }
+    }
+  },
+  {
+    "horario": "2025-12-02T19:03:10",
+    "nome": "Nyx",
+    "classe": "Mago",
+    "pontos": 75,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 150,
+      "passos_totais": 12,
+      "descansos_realizados": 0,
+      "nivel_final": 1,
+      "experiencia_total_ganha": 60,
+      "niveis_ganhos": 0,
+      "combate": {
+        "inimigos_derrotados": 2,
+        "fugas": 0,
+        "criticos_acertados": 1,
+        "criticos_sofridos": 1,
+        "desvios": 1,
+        "falhas_criticas_jogador": 0,
+        "falhas_criticas_inimigos": 1,
+        "habilidades_usadas": 4,
+        "magias_lancadas": 3,
+        "habilidades_desbloqueadas": 1
+      },
+      "eventos": {
+        "baus_abertos": 1,
+        "fontes_usadas": 0,
+        "charadas_acertadas": 0,
+        "charadas_erradas": 0
+      }
+    }
+  },
+  {
+    "horario": "2025-12-02T19:11:55",
+    "nome": "Eldric",
+    "classe": "Guerreiro",
+    "pontos": 190,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 275,
+      "passos_totais": 31,
+      "descansos_realizados": 1,
+      "nivel_final": 3,
+      "experiencia_total_ganha": 240,
+      "niveis_ganhos": 2,
+      "combate": {
+        "inimigos_derrotados": 9,
+        "fugas": 1,
+        "criticos_acertados": 3,
+        "criticos_sofridos": 3,
+        "desvios": 7,
+        "falhas_criticas_jogador": 2,
+        "falhas_criticas_inimigos": 2,
+        "habilidades_usadas": 12,
+        "magias_lancadas": 0,
+        "habilidades_desbloqueadas": 2
+      },
+      "eventos": {
+        "baus_abertos": 2,
+        "fontes_usadas": 0,
+        "charadas_acertadas": 1,
+        "charadas_erradas": 0
+      }
+    }
+  },
+  {
+    "horario": "2025-12-02T19:20:39",
+    "nome": "Sylas",
+    "classe": "Guerreiro",
+    "pontos": 135,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 230,
+      "passos_totais": 24,
+      "descansos_realizados": 0,
+      "nivel_final": 2,
+      "experiencia_total_ganha": 160,
+      "niveis_ganhos": 1,
+      "combate": {
+        "inimigos_derrotados": 7,
+        "fugas": 1,
+        "criticos_acertados": 2,
+        "criticos_sofridos": 3,
+        "desvios": 5,
+        "falhas_criticas_jogador": 1,
+        "falhas_criticas_inimigos": 3,
+        "habilidades_usadas": 10,
+        "magias_lancadas": 0,
+        "habilidades_desbloqueadas": 1
+      },
+      "eventos": {
+        "baus_abertos": 1,
+        "fontes_usadas": 1,
+        "charadas_acertadas": 0,
+        "charadas_erradas": 1
+      }
+    }
+  },
+  {
+    "horario": "2025-12-02T19:29:08",
+    "nome": "Aria",
+    "classe": "Mago",
+    "pontos": 210,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 330,
+      "passos_totais": 30,
+      "descansos_realizados": 2,
+      "nivel_final": 3,
+      "experiencia_total_ganha": 260,
+      "niveis_ganhos": 2,
+      "combate": {
+        "inimigos_derrotados": 10,
+        "fugas": 0,
+        "criticos_acertados": 5,
+        "criticos_sofridos": 2,
+        "desvios": 6,
+        "falhas_criticas_jogador": 1,
+        "falhas_criticas_inimigos": 2,
+        "habilidades_usadas": 14,
+        "magias_lancadas": 10,
+        "habilidades_desbloqueadas": 3
+      },
+      "eventos": {
+        "baus_abertos": 2,
+        "fontes_usadas": 1,
+        "charadas_acertadas": 1,
+        "charadas_erradas": 0
+      }
+    }
+  },
+  {
+    "horario": "2025-12-02T19:36:51",
+    "nome": "Darius",
+    "classe": "Guerreiro",
+    "pontos": 88,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 160,
+      "passos_totais": 18,
+      "descansos_realizados": 0,
+      "nivel_final": 1,
+      "experiencia_total_ganha": 80,
+      "niveis_ganhos": 0,
+      "combate": {
+        "inimigos_derrotados": 4,
+        "fugas": 1,
+        "criticos_acertados": 1,
+        "criticos_sofridos": 2,
+        "desvios": 3,
+        "falhas_criticas_jogador": 1,
+        "falhas_criticas_inimigos": 1,
+        "habilidades_usadas": 7,
+        "magias_lancadas": 0,
+        "habilidades_desbloqueadas": 1
+      },
+      "eventos": {
+        "baus_abertos": 1,
+        "fontes_usadas": 0,
+        "charadas_acertadas": 0,
+        "charadas_erradas": 0
+      }
+    }
+  },
+  {
+    "horario": "2025-12-02T19:45:37",
+    "nome": "Freya",
+    "classe": "Mago",
+    "pontos": 165,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 260,
+      "passos_totais": 23,
+      "descansos_realizados": 1,
+      "nivel_final": 2,
+      "experiencia_total_ganha": 200,
+      "niveis_ganhos": 1,
+      "combate": {
+        "inimigos_derrotados": 8,
+        "fugas": 0,
+        "criticos_acertados": 3,
+        "criticos_sofridos": 2,
+        "desvios": 5,
+        "falhas_criticas_jogador": 0,
+        "falhas_criticas_inimigos": 2,
+        "habilidades_usadas": 11,
+        "magias_lancadas": 8,
+        "habilidades_desbloqueadas": 2
+      },
+      "eventos": {
+        "baus_abertos": 2,
+        "fontes_usadas": 0,
+        "charadas_acertadas": 1,
+        "charadas_erradas": 1
+      }
+    }
+  },
+  {
+    "horario": "2025-12-02T19:53:19",
+    "nome": "Gideon",
+    "classe": "Guerreiro",
+    "pontos": 175,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 285,
+      "passos_totais": 29,
+      "descansos_realizados": 2,
+      "nivel_final": 2,
+      "experiencia_total_ganha": 210,
+      "niveis_ganhos": 1,
+      "combate": {
+        "inimigos_derrotados": 9,
+        "fugas": 1,
+        "criticos_acertados": 3,
+        "criticos_sofridos": 3,
+        "desvios": 6,
+        "falhas_criticas_jogador": 2,
+        "falhas_criticas_inimigos": 2,
+        "habilidades_usadas": 13,
+        "magias_lancadas": 0,
+        "habilidades_desbloqueadas": 2
+      },
+      "eventos": {
+        "baus_abertos": 1,
+        "fontes_usadas": 1,
+        "charadas_acertadas": 0,
+        "charadas_erradas": 1
+      }
+    }
+  },
+  {
+    "horario": "2025-12-02T20:01:44",
+    "nome": "Morgana",
+    "classe": "Mago",
+    "pontos": 220,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 350,
+      "passos_totais": 36,
+      "descansos_realizados": 3,
+      "nivel_final": 3,
+      "experiencia_total_ganha": 290,
+      "niveis_ganhos": 2,
+      "combate": {
+        "inimigos_derrotados": 11,
+        "fugas": 0,
+        "criticos_acertados": 5,
+        "criticos_sofridos": 3,
+        "desvios": 7,
+        "falhas_criticas_jogador": 1,
+        "falhas_criticas_inimigos": 3,
+        "habilidades_usadas": 16,
+        "magias_lancadas": 11,
+        "habilidades_desbloqueadas": 3
+      },
+      "eventos": {
+        "baus_abertos": 3,
+        "fontes_usadas": 1,
         "charadas_acertadas": 1,
         "charadas_erradas": 1
       }
