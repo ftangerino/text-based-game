@@ -148,6 +148,17 @@ def resolver_charada() -> bool:
         ("O que é, o que é? Tem cabeça e tem dente, não é bicho e nem é gente?", "alho"),
         ("Quanto mais se tira, maior fica?", "buraco"),
         ("O que sempre está na sua frente, mas você não consegue ver?", "futuro"),
+        ("O que é, o que é? Tem coroa mas não é rei, tem escama mas não é peixe?", "abacaxi"),
+        ("O que é, o que é? Anda com os pés na cabeça?", "piolho"),
+        ("O que é, o que é? Quebra assim que se diz o nome?", "silêncio"),
+        ("O que é, o que é? Entra na água e não se molha?", "sombra"),
+        ("O que é, o que é? É surdo e mudo, mas conta tudo?", "livro"),
+        ("O que é, o que é? Dá muitas voltas e não sai do lugar?", "relógio"),
+        ("O que é, o que é? É feito de água, mas se colocar na água morre?", "gelo"),
+        ("O que é, o que é? Quanto mais enxuga, mais molhada fica?", "toalha"),
+        ("O que é, o que é? Pertence a você, mas os outros usam mais que você?", "nome"),
+        ("O que é, o que é? Passa diante do sol e não faz sombra?", "vento"),
+        ("O que é, o que é? Tem cidades, mas não tem casas; tem montanhas, mas não tem árvores; tem água, mas não tem peixes?", "mapa")
     ]
     pergunta, resposta_certa = random.choice(charadas)
     print(f"\n📜 CHARADA: {pergunta}")
