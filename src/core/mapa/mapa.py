@@ -1,4 +1,20 @@
+###################################################################################################
+# 📥 IMPORTS | CODING: UTF-8
+###################################################################################################
+# ✅ → Discussed and realized
+# 🟢 → Discussed and not realized (to be done after the meeting)
+# 🟡 → Little important and not discussed (unhindered)
+# 🔴 → Very important and not discussed (hindered)
+# ❌ → Canceled
+# ⚪ → Postponed (technical debit)
+###################################################################################################
+# -------------------------------------------------------------------------------------------------
+# 🗺️  GERENCIAMENTO DO GRID DO JOGO
+# -------------------------------------------------------------------------------------------------
+
+
 class Mapa:
+    """Classe utilitária para controlar posições, ícones e inimigos no grid."""
     def __init__(self, linhas, colunas, preenchimento="."):
         #  (.) representa um espaço vazio
         self.mapa = [[preenchimento for _ in range(colunas)] for _ in range(linhas)]

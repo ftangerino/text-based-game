@@ -1,7 +1,20 @@
-# /src/core/entidade.py
+###################################################################################################
+# 📥 IMPORTS | CODING: UTF-8
+###################################################################################################
+# ✅ → Discussed and realized
+# 🟢 → Discussed and not realized (to be done after the meeting)
+# 🟡 → Little important and not discussed (unhindered)
+# 🔴 → Very important and not discussed (hindered)
+# ❌ → Canceled
+# ⚪ → Postponed (technical debit)
+###################################################################################################
+# -------------------------------------------------------------------------------------------------
+# 🧱 MODELO BÁSICO DE ENTIDADE
+# -------------------------------------------------------------------------------------------------
 
 
 class Entidade:
+    """Base de atributos compartilhados entre jogadores e inimigos."""
     def __init__(self, id, nome, nivel, hp, mp, str, dex, int, def_, luk):
         self.id = id
         self.nome = nome
