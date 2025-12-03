@@ -5,6 +5,8 @@ import random
 from datetime import datetime
 from typing import Dict, List, Tuple
 
+import psycopg2
+
 # Adiciona o diretório pai ao path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -18,12 +20,22 @@ from core.mapa.enumEventos import EnumEventos
 LINHAS = 5
 COLUNAS = 5
 
+# Config DB Postgres
+DB_CONFIG = {
+    "host": "164.68.104.247",
+    "user": "francisco",
+    "password": "projetoFrancisco01",
+    "dbname": "projpi",
+}
+
+
 def solicitar_nome() -> str:
     while True:
         nome = input("Digite o nome do seu personagem: ").strip()
         if nome:
             return nome
         print("O nome não pode ser vazio.")
+
 
 def escolher_classe() -> EnumClasses:
     print("\nEscolha uma classe:")
@@ -37,6 +49,7 @@ def escolher_classe() -> EnumClasses:
             if 0 <= indice < len(EnumClasses):
                 return list(EnumClasses)[indice]
         print("Classe inválida.")
+
 
 def criar_jogador(nome: str, classe: EnumClasses, mapa: Mapa) -> Jogador:
     jogador = Jogador(
@@ -53,8 +66,9 @@ def criar_jogador(nome: str, classe: EnumClasses, mapa: Mapa) -> Jogador:
         posicao_inicial=(0, 0),
     )
     jogador.setVida(classe.hp)
-    jogador.icone = classe.icone 
+    jogador.icone = classe.icone
     return jogador
+
 
 def gerar_inimigos_fase(
     configuracao: Dict[EnumInimigos, int],
@@ -84,35 +98,41 @@ def gerar_inimigos_fase(
 
     return inimigos
 
+
 def gerar_eventos_fase(quantidade: int, mapa: Mapa) -> Dict[Tuple[int, int], EnumEventos]:
     eventos_ativos = {}
     tipos_eventos = [EnumEventos.FONTE_CURA, EnumEventos.CHARADA, EnumEventos.BAU_TESOURO]
-    
+
     for _ in range(quantidade):
         evento_escolhido = random.choice(tipos_eventos)
         while True:
             x, y = random.randint(0, LINHAS - 1), random.randint(0, COLUNAS - 1)
-            if (x, y) != (0, 0) and mapa.obter_posicao(x, y) == "." and (x,y) not in eventos_ativos:
+            if (x, y) != (0, 0) and mapa.obter_posicao(x, y) == "." and (x, y) not in eventos_ativos:
                 mapa.atualizar_posicao(x, y, evento_escolhido.icone)
                 eventos_ativos[(x, y)] = evento_escolhido
                 break
     return eventos_ativos
+
 
 def resolver_charada() -> bool:
     charadas = [
         ("O que é, o que é? Cai em pé e corre deitado?", "chuva"),
         ("O que é, o que é? Tem cabeça e tem dente, não é bicho e nem é gente?", "alho"),
         ("Quanto mais se tira, maior fica?", "buraco"),
-        ("O que sempre está na sua frente, mas você não consegue ver?", "futuro")
+        ("O que sempre está na sua frente, mas você não consegue ver?", "futuro"),
     ]
     pergunta, resposta_certa = random.choice(charadas)
     print(f"\n📜 CHARADA: {pergunta}")
     resposta = input("Sua resposta: ").lower().strip()
     return resposta == resposta_certa
 
+
 def registrar_pontuacao(
     nome: str, classe: EnumClasses, pontos: int, stats: Dict, jogador: Jogador
 ) -> None:
+    """
+    Continua salvando no scores.json como log histórico local.
+    """
     data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
     os.makedirs(data_dir, exist_ok=True)
     placar_path = os.path.join(data_dir, "scores.json")
@@ -127,7 +147,7 @@ def registrar_pontuacao(
         "metricas_bi": {
             "tempo_sessao_segundos": int(tempo_total),
             "passos_totais": stats["passos_dados"],
-            "descansos_realizados": stats["descansos"], # Nova métrica
+            "descansos_realizados": stats["descansos"],
             "nivel_final": jogador.nivel,
             "experiencia_total_ganha": stats["experiencia_ganha"],
             "niveis_ganhos": stats["niveis_ganhos"],
@@ -147,9 +167,9 @@ def registrar_pontuacao(
                 "baus_abertos": stats["baus_abertos"],
                 "fontes_usadas": stats["fontes_usadas"],
                 "charadas_acertadas": stats["charadas_acertadas"],
-                "charadas_erradas": stats["charadas_erradas"]
-            }
-        }
+                "charadas_erradas": stats["charadas_erradas"],
+            },
+        },
     }
 
     try:
@@ -163,6 +183,190 @@ def registrar_pontuacao(
         json.dump(dados, arquivo, ensure_ascii=False, indent=2)
 
     print(f"\n[BI] Dados analíticos salvos em {placar_path}")
+
+
+# ============================
+# SALVAR PROGRESSO NO POSTGRES
+# ============================
+
+def salvar_progresso_db(
+    nome: str, classe: EnumClasses, pontos: int, stats: Dict, jogador: Jogador
+) -> None:
+    """
+    Salva/atualiza o progresso da sessão atual no Postgres.
+    - Na primeira chamada: cria jogador, classe e sessão (sessao_id fica em stats).
+    - Nas próximas: atualiza a mesma sessão até o jogador ganhar ou morrer.
+    """
+    conn = None
+    try:
+        conn = psycopg2.connect(**DB_CONFIG)
+        cur = conn.cursor()
+
+        # Garante o schema correto
+        cur.execute("SET search_path TO jogo_pi;")
+
+        # Upsert de classe
+        cur.execute(
+            """
+            INSERT INTO classe (nome)
+            VALUES (%s)
+            ON CONFLICT (nome)
+            DO UPDATE SET nome = EXCLUDED.nome
+            RETURNING id;
+            """,
+            (classe.nome,),
+        )
+        classe_id = cur.fetchone()[0]
+
+        # Upsert de jogador
+        cur.execute(
+            """
+            INSERT INTO jogador (nome)
+            VALUES (%s)
+            ON CONFLICT (nome)
+            DO UPDATE SET nome = EXCLUDED.nome
+            RETURNING id;
+            """,
+            (nome,),
+        )
+        jogador_id = cur.fetchone()[0]
+
+        # Cria a sessão na primeira vez
+        if stats.get("sessao_id") is None:
+            cur.execute(
+                """
+                INSERT INTO sessao (jogador_id, classe_id, horario, pontos)
+                VALUES (%s, %s, %s, %s)
+                RETURNING id;
+                """,
+                (jogador_id, classe_id, stats["inicio_jogo"], pontos),
+            )
+            sessao_id = cur.fetchone()[0]
+            stats["sessao_id"] = sessao_id
+        else:
+            sessao_id = stats["sessao_id"]
+            cur.execute(
+                """
+                UPDATE sessao
+                SET pontos = %s
+                WHERE id = %s;
+                """,
+                (pontos, sessao_id),
+            )
+
+        # Tempo de sessão até o momento
+        tempo_total = int((datetime.now() - stats["inicio_jogo"]).total_seconds())
+
+        # Métricas gerais
+        cur.execute(
+            """
+            INSERT INTO sessao_metricas (
+                sessao_id,
+                tempo_sessao_segundos,
+                passos_totais,
+                descansos_realizados,
+                nivel_final,
+                experiencia_total_ganha,
+                niveis_ganhos
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            ON CONFLICT (sessao_id) DO UPDATE SET
+                tempo_sessao_segundos   = EXCLUDED.tempo_sessao_segundos,
+                passos_totais           = EXCLUDED.passos_totais,
+                descansos_realizados    = EXCLUDED.descansos_realizados,
+                nivel_final             = EXCLUDED.nivel_final,
+                experiencia_total_ganha = EXCLUDED.experiencia_total_ganha,
+                niveis_ganhos           = EXCLUDED.niveis_ganhos;
+            """,
+            (
+                sessao_id,
+                tempo_total,
+                stats["passos_dados"],
+                stats["descansos"],
+                jogador.nivel,
+                stats["experiencia_ganha"],
+                stats["niveis_ganhos"],
+            ),
+        )
+
+        # Métricas de combate
+        cur.execute(
+            """
+            INSERT INTO sessao_metricas_combate (
+                sessao_id,
+                inimigos_derrotados,
+                fugas,
+                criticos_acertados,
+                criticos_sofridos,
+                desvios,
+                falhas_criticas_jogador,
+                falhas_criticas_inimigos,
+                habilidades_usadas,
+                magias_lancadas,
+                habilidades_desbloqueadas
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ON CONFLICT (sessao_id) DO UPDATE SET
+                inimigos_derrotados       = EXCLUDED.inimigos_derrotados,
+                fugas                     = EXCLUDED.fugas,
+                criticos_acertados        = EXCLUDED.criticos_acertados,
+                criticos_sofridos         = EXCLUDED.criticos_sofridos,
+                desvios                   = EXCLUDED.desvios,
+                falhas_criticas_jogador   = EXCLUDED.falhas_criticas_jogador,
+                falhas_criticas_inimigos  = EXCLUDED.falhas_criticas_inimigos,
+                habilidades_usadas        = EXCLUDED.habilidades_usadas,
+                magias_lancadas           = EXCLUDED.magias_lancadas,
+                habilidades_desbloqueadas = EXCLUDED.habilidades_desbloqueadas;
+            """,
+            (
+                sessao_id,
+                stats["inimigos_derrotados"],
+                stats["fugas"],
+                stats["criticos_acertados"],
+                stats["criticos_sofridos"],
+                stats["desvios"],
+                stats["falhas_criticas_jogador"],
+                stats["falhas_criticas_inimigos"],
+                stats["habilidades_usadas"],
+                stats["magias_lancadas"],
+                stats["habilidades_desbloqueadas"],
+            ),
+        )
+
+        # Métricas de eventos
+        cur.execute(
+            """
+            INSERT INTO sessao_metricas_eventos (
+                sessao_id,
+                baus_abertos,
+                fontes_usadas,
+                charadas_acertadas,
+                charadas_erradas
+            )
+            VALUES (%s, %s, %s, %s, %s)
+            ON CONFLICT (sessao_id) DO UPDATE SET
+                baus_abertos       = EXCLUDED.baus_abertos,
+                fontes_usadas      = EXCLUDED.fontes_usadas,
+                charadas_acertadas = EXCLUDED.charadas_acertadas,
+                charadas_erradas   = EXCLUDED.charadas_erradas;
+            """,
+            (
+                sessao_id,
+                stats["baus_abertos"],
+                stats["fontes_usadas"],
+                stats["charadas_acertadas"],
+                stats["charadas_erradas"],
+            ),
+        )
+
+        conn.commit()
+        print(f"[BI][DB] Progresso salvo/atualizado (sessao_id={sessao_id}).")
+
+    except Exception as e:
+        print(f"[BI][ERRO] Falha ao salvar progresso no banco: {e}")
+    finally:
+        if conn:
+            conn.close()
 
 
 def calcular_chance_acerto(atacante_dex: int, defesa_defensor: int, evasao_defensor: int) -> float:
@@ -307,6 +511,7 @@ def executar_batalha(
             print("💀 Você foi derrotado! A batalha terminou.")
             return "derrota", 0, 0
 
+
 def jogar_fase(
     jogador: Jogador,
     mapa: Mapa,
@@ -352,7 +557,7 @@ def jogar_fase(
                 pontos += 5
                 stats["fontes_usadas"] += 1
                 print("✨ Suas feridas foram curadas completamente! (+5 pontos)")
-            
+
             elif evento == EnumEventos.CHARADA:
                 acertou = resolver_charada()
                 if acertou:
@@ -362,7 +567,7 @@ def jogar_fase(
                 else:
                     stats["charadas_erradas"] += 1
                     print("❌ Resposta errada... O enigma desaparece.")
-            
+
             elif evento == EnumEventos.BAU_TESOURO:
                 pontos_bau = random.randint(15, 30)
                 pontos += pontos_bau
@@ -374,9 +579,10 @@ def jogar_fase(
 
         else:
             mapa.atualizar_posicao(*pos_jogador, jogador.icone)
-        
+
     print(f"\n>>> {nome_fase} Concluída! <<<")
     return pontos + 20, True
+
 
 def main():
     print("=== RPG PYTHON: EDIÇÃO BI ANALYTICS ===")
@@ -387,7 +593,7 @@ def main():
     stats = {
         "inicio_jogo": datetime.now(),
         "passos_dados": 0,
-        "descansos": 0, # Novo KPI
+        "descansos": 0,
         "inimigos_derrotados": 0,
         "fugas": 0,
         "mortes": 0,
@@ -405,11 +611,12 @@ def main():
         "habilidades_usadas": 0,
         "magias_lancadas": 0,
         "habilidades_desbloqueadas": 0,
+        "sessao_id": None,
     }
 
     setups_de_fases = [
         {
-            "nome": "Trilha do Reino", 
+            "nome": "Trilha do Reino",
             "descricao": "Uma jornada clássica por planícies abertas, uma floresta viva e um castelo profano.",
             "fases": [
                 {
@@ -500,12 +707,12 @@ def main():
     jogador.nome_classe_original_key = classe_escolhida.name
 
     pontos = 0
-    
+
     for fase in fases:
         mapa = Mapa(LINHAS, COLUNAS)
         jogador.mapa = mapa
         jogador.posicao = (0, 0)
-        
+
         mapa.atualizar_posicao(*jogador.posicao, classe_escolhida.icone)
 
         inimigos_lista = gerar_inimigos_fase(
@@ -521,6 +728,7 @@ def main():
         pontos, jogador_vivo = jogar_fase(
             jogador, mapa, inimigos_lista, eventos_dict, fase["nome"], pontos, stats
         )
+        salvar_progresso_db(nome, classe_escolhida, pontos, stats, jogador)
 
         if not jogador_vivo:
             print("-" * 50)
@@ -536,6 +744,8 @@ def main():
     print("-" * 50)
 
     registrar_pontuacao(nome, classe_escolhida, pontos, stats, jogador)
+    salvar_progresso_db(nome, classe_escolhida, pontos, stats, jogador)
+
 
 if __name__ == "__main__":
     main()
