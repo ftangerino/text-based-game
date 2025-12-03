@@ -190,15 +190,14 @@ class Jogador(Entidade):
         descansar = "descansar"
         mostrar_status = "checar status"
         print("""
+____________________________________________________________________________________  
+                            
+                O que você deseja fazer?
+                Ações de Movimento:                 Ações de Descanso:
+                -   Esquerda | Direita               - Checar Status
+                -   Cima     | Baixo                 - Descansar
 ____________________________________________________________________________________
-
-            O que você deseja fazer?
-            Ações de Movimento:                 Ações de Descanso:
-            -   Ir para Esquerda               - Checar Status
-            -   Ir para Direita                - Descansar
-            -   Ir para Cima
-____________________________________________________________________________________
-            """ )
+                """ )
         while True:
             acao = input("Digite a ação que deseja realizar: ").lower()
             if acao in movimentos:
@@ -213,11 +212,10 @@ ________________________________________________________________________________
                     print("""
         ____________________________________________________________________________________
 
-                        O que você deseja fazer?
-                        Ações de Movimento:                 Ações de Descanso:
-                        -   Ir para Esquerda               - Checar Status
-                        -   Ir para Direita                - Descansar
-                        -   Ir para Cima
+                O que você deseja fazer?
+                Ações de Movimento:                 Ações de Descanso:
+                -   Esquerda | Direita               - Checar Status
+                -   Cima     | Baixo                 - Descansar
         ____________________________________________________________________________________
                         """ )
                     self.mapa.exibir_mapa()
@@ -259,9 +257,8 @@ ________________________________________________________________________________
 
                 O que você deseja fazer?
                 Ações de Movimento:                 Ações de Descanso:
-                -   Ir para Esquerda               - Checar Status
-                -   Ir para Direita                - Descansar
-                -   Ir para Cima
+                -   Esquerda | Direita               - Checar Status
+                -   Cima     | Baixo                 - Descansar
 ____________________________________________________________________________________
                 """ )
             print("Digite a ação que deseja realizar:", end=" ")
