@@ -15,6 +15,7 @@ from ..entidade import Entidade
 from .enumClasses import EnumClasses
 from magias.enumMagia import enumMagia
 from magias.enumTecnica import enumTecnica
+from magias.enumTecnicasArqueiro import enumTecnicasArqueiro
 
 
 class Jogador(Entidade):
@@ -44,16 +45,25 @@ class Jogador(Entidade):
     ###################################################################################################
 
     def definir_classe(self, classe: EnumClasses, stats=None):
-        """Configura classe escolhida e popula fila de habilidades conforme nível."""
         self.classe = classe
+
+        # Ajusta ícone do mapa conforme a classe escolhida
+        self.icone = classe.icone
+        self.mapa.atualizar_posicao(*self.posicao, self.icone)
+
         if classe == EnumClasses.MAGO:
             fila = [magia.criar_magia() for magia in sorted(enumMagia, key=lambda m: m.nivel_requerido)]
+        elif classe == EnumClasses.GUERREIRO:
+            fila = [tec.criar_tecnica() for tec in sorted(enumTecnica, key=lambda t: t.nivel_requerido)]
+        elif classe == EnumClasses.ARQUEIRO:
+            fila = [tec.criar_tecnica() for tec in sorted(enumTecnicasArqueiro, key=lambda t: t.nivel_requerido)]
         else:
-            fila = [tecnica.criar_tecnica() for tecnica in sorted(enumTecnica, key=lambda t: t.nivel_requerido)]
+            fila = []
 
         self._habilidades_para_desbloquear = fila
         self.habilidades = []
         self._desbloquear_habilidades_por_nivel(stats)
+
 
     def _calcular_experiencia_necessaria(self):
         return 100 + (self.nivel - 1) * 50
@@ -262,7 +272,8 @@ ________________________________________________________________________________
             elif acao == descansar:
                 cura = self.hp * 0.1
                 self.setVida(self.hp + cura)
-                print(f"Você descansou e recuperou {cura} de vida")
+                self.setMp(self.mp + cura)
+                print(f"Você descansou e recuperou {cura} de vida e mana")
             elif acao == mostrarStatus:
                 print(self.toString())
             else:

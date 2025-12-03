@@ -54,3 +54,10 @@ Os arquivos em `src/tests/` são esboços interativos e dependem de entrada do u
 - Mantenha o mapa visível para não esquecer onde estão inimigos (`I`) e eventos especiais.
 - Use descansos com moderação para recuperar HP, mas fique atento aos pontos e ao ritmo das fases.
 - Explore diferentes classes para destravar habilidades exclusivas e aumentar as métricas de magia ou técnica.
+
+
+## Link de toda documentação, slides, BI e videos:
+
+### Recursos do Projeto  
+- [📁 Documentação, Slides, BI e Vídeos](https://drive.google.com/drive/folders/1CgC8350S4c4Jip9NhSuy8Q_aLgACVIKl?usp=sharing)
+

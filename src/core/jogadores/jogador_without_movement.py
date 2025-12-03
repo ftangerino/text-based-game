@@ -55,9 +55,8 @@ ________________________________________________________________________________
                             
                 O que você deseja fazer?
                 Ações de Movimento:                 Ações de Descanso:
-                -   Ir para Esquerda               - Checar Status
-                -   Ir para Direita                - Descansar
-                -   Ir para Cima                   
+                -   Esquerda | Direita               - Checar Status
+                -   Cima     | Baixo                 - Descansar
 ____________________________________________________________________________________
                 """ )
             print("Digite a ação que deseja realizar:", end=" ")

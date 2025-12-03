@@ -4,10 +4,10 @@ from .magia import Magia
 
 
 class enumMagia(Enum):
-    RAIO = ("Raio", 8, 6, 1)
-    FOGO = ("Bola de Fogo", 16, 12, 2)
-    GELO = ("Lança de Gelo", 24, 16, 3)
-    TEMPESTADE = ("Tempestade Arcana", 40, 22, 5)
+    RAIO = ("Raio", 12, 6, 1)
+    FOGO = ("Bola de Fogo", 21, 12, 2)
+    GELO = ("Lança de Gelo", 30, 16, 3)
+    TEMPESTADE = ("Tempestade Arcana", 45, 22, 5)
 
     def __init__(self, nome, dano, custo, nivel_requerido):
         self.nome = nome

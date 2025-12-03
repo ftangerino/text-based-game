@@ -4,8 +4,8 @@ from .magia import Magia
 
 
 class enumTecnica(Enum):
-    CORTE_PRECISO = ("Corte Preciso", 12, 0, 1)
-    GOLPE_ESCUDO = ("Golpe de Escudo", 18, 6, 2)
+    CORTE_PRECISO = ("Corte Preciso", 17, 0, 1)
+    GOLPE_ESCUDO = ("Golpe de Escudo", 23, 6, 2)
     LAMINA_TEMPESTUOSA = ("Lâmina Tempestuosa", 26, 10, 3)
     FURIA_DO_GUERREIRO = ("Fúria do Guerreiro", 38, 14, 5)
 

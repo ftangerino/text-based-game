@@ -214,6 +214,43 @@ def registrar_pontuacao(
     print(f"\n[BI] Dados analíticos salvos em {placar_path}")
 
 
+def exibir_estatisticas(nome: str, classe: EnumClasses, pontos: int, stats: Dict, jogador: Jogador) -> None:
+    tempo_total = int((datetime.now() - stats["inicio_jogo"]).total_seconds())
+
+    print("\n" + "=" * 50)
+    print(f"📊 ESTATÍSTICAS DA SESSÃO")
+    print("=" * 50)
+    print(f"😎 Jogador: {nome} ({classe.nome})")
+    print(f"⭐ Pontuação final: {pontos}")
+    print(f"⏱️ Tempo de sessão: {tempo_total} segundos")
+    print(f"🏃 Passos dados: {stats['passos_dados']}")
+    print(f"🛏️ Descansos realizados: {stats['descansos']}")
+    print(f"📈 Nível final: {jogador.nivel}")
+    print(f"✨ Experiência total ganha: {stats['experiencia_ganha']}")
+    print(f"⬆️ Níveis ganhos: {stats['niveis_ganhos']}")
+    print()
+    print("⚔️ COMBATE")
+    print(f"  - Inimigos derrotados: {stats['inimigos_derrotados']}")
+    print(f"  - Fugas: {stats['fugas']}")
+    print(f"  - Críticos acertados: {stats['criticos_acertados']}")
+    print(f"  - Críticos sofridos: {stats['criticos_sofridos']}")
+    print(f"  - Desvios: {stats['desvios']}")
+    print(f"  - Falhas críticas (jogador): {stats['falhas_criticas_jogador']}")
+    print(f"  - Falhas críticas (inimigos): {stats['falhas_criticas_inimigos']}")
+    print(f"  - Habilidades usadas: {stats['habilidades_usadas']}")
+    print(f"  - Magias lançadas: {stats['magias_lancadas']}")
+    print(f"  - Habilidades desbloqueadas: {stats['habilidades_desbloqueadas']}")
+    print()
+    print("🎲 EVENTOS")
+    print(f"  - Baús abertos: {stats['baus_abertos']}")
+    print(f"  - Fontes usadas: {stats['fontes_usadas']}")
+    print(f"  - Charadas acertadas: {stats['charadas_acertadas']}")
+    print(f"  - Charadas erradas: {stats['charadas_erradas']}")
+    print("=" * 50 + "\n")
+
+def esperar_enter_final():
+    input("\nPressione ENTER para fechar o jogo...")
+
 # ============================
 # SALVAR PROGRESSO NO POSTGRES
 # ============================
@@ -663,17 +700,17 @@ def main():
                     "nome": "Planície Dourada",
                     "descricao": "Campos ensolarados onde bandidos e lobos espreitam viajantes.",
                     "inimigos": {
-                        EnumInimigos.BANDIDO: 2,
-                        EnumInimigos.LOBO: 2,
-                        EnumInimigos.URUBU: 1,
+                        EnumInimigos.BANDIDO: 3,
+                        EnumInimigos.LOBO: 3,
+                        EnumInimigos.URUBU: 2,
                     },
-                    "qtd_eventos": 2,
+                    "qtd_eventos": 3,
                 },
                 {
                     "nome": "Floresta Ancestral",
                     "descricao": "Bosque fechado guardado por goblins, aranhas e espíritos antigos.",
                     "inimigos": {
-                        EnumInimigos.GOBLIN: 2,
+                        EnumInimigos.GOBLIN: 4,
                         EnumInimigos.ARANHA: 2,
                         EnumInimigos.TREANT: 1,
                         EnumInimigos.ESPIRITO_FLORESTA: 1,
@@ -684,12 +721,12 @@ def main():
                     "nome": "Castelo Profano",
                     "descricao": "Salões tomados por bruxas e cavaleiros corrompidos culminando em um Lich.",
                     "inimigos": {
-                        EnumInimigos.ESQUELETO: 2,
+                        EnumInimigos.ESQUELETO: 3,
                         EnumInimigos.BRUXA: 1,
                         EnumInimigos.CAVALEIRO_NEGRO: 1,
                         EnumInimigos.FEITICEIRO_SOMBRIO: 1,
                     },
-                    "qtd_eventos": 3,
+                    "qtd_eventos": 4,
                     "chefe": EnumInimigos.LICH,
                 },
             ],
@@ -775,7 +812,10 @@ def main():
             print(f"{nome.upper()} foi derrotado na {fase['nome']}.")
             print(f"Pontuação Final: {pontos}")
             print("-" * 50)
+
+            exibir_estatisticas(nome, classe_escolhida, pontos, stats, jogador)
             registrar_pontuacao(nome, classe_escolhida, pontos, stats, jogador)
+            esperar_enter_final()
             return
 
     print("-" * 50)
@@ -783,8 +823,10 @@ def main():
     print(f"Pontuação Final: {pontos}")
     print("-" * 50)
 
+    exibir_estatisticas(nome, classe_escolhida, pontos, stats, jogador)
     registrar_pontuacao(nome, classe_escolhida, pontos, stats, jogador)
     salvar_progresso_db(nome, classe_escolhida, pontos, stats, jogador)
+    esperar_enter_final()
 
 
 if __name__ == "__main__":

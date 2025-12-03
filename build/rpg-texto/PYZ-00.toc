@@ -260,6 +260,10 @@
    'C:\\Programs-General\\Faculdade\\PI_4 '
    'TRIMESTRE\\text-based-game\\src\\magias\\enumTecnica.py',
    'PYMODULE'),
+  ('magias.enumTecnicasArqueiro',
+   'C:\\Programs-General\\Faculdade\\PI_4 '
+   'TRIMESTRE\\text-based-game\\src\\magias\\enumTecnicasArqueiro.py',
+   'PYMODULE'),
   ('magias.magia',
    'C:\\Programs-General\\Faculdade\\PI_4 '
    'TRIMESTRE\\text-based-game\\src\\magias\\magia.py',

@@ -574,5 +574,69 @@
         "charadas_erradas": 1
       }
     }
+  },
+  {
+    "horario": "2025-12-03T15:54:47",
+    "nome": "Etvaldo",
+    "classe": "Guerreiro",
+    "pontos": 20,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 15,
+      "passos_totais": 4,
+      "descansos_realizados": 0,
+      "nivel_final": 1,
+      "experiencia_total_ganha": 33,
+      "niveis_ganhos": 0,
+      "combate": {
+        "inimigos_derrotados": 2,
+        "fugas": 0,
+        "criticos_acertados": 0,
+        "criticos_sofridos": 0,
+        "desvios": 1,
+        "falhas_criticas_jogador": 1,
+        "falhas_criticas_inimigos": 0,
+        "habilidades_usadas": 0,
+        "magias_lancadas": 0,
+        "habilidades_desbloqueadas": 1
+      },
+      "eventos": {
+        "baus_abertos": 0,
+        "fontes_usadas": 0,
+        "charadas_acertadas": 0,
+        "charadas_erradas": 0
+      }
+    }
+  },
+  {
+    "horario": "2025-12-03T15:57:04",
+    "nome": "Etvaldo",
+    "classe": "Guerreiro",
+    "pontos": 236,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 118,
+      "passos_totais": 42,
+      "descansos_realizados": 0,
+      "nivel_final": 4,
+      "experiencia_total_ganha": 478,
+      "niveis_ganhos": 3,
+      "combate": {
+        "inimigos_derrotados": 15,
+        "fugas": 0,
+        "criticos_acertados": 1,
+        "criticos_sofridos": 0,
+        "desvios": 3,
+        "falhas_criticas_jogador": 2,
+        "falhas_criticas_inimigos": 0,
+        "habilidades_usadas": 0,
+        "magias_lancadas": 0,
+        "habilidades_desbloqueadas": 3
+      },
+      "eventos": {
+        "baus_abertos": 1,
+        "fontes_usadas": 1,
+        "charadas_acertadas": 0,
+        "charadas_erradas": 0
+      }
+    }
   }
 ]
