@@ -50,5 +50,122 @@
         "charadas_erradas": 0
       }
     }
+  },
+  {
+    "horario": "2025-12-02T19:51:01",
+    "nome": "Jumanji",
+    "classe": "Guerreiro",
+    "pontos": 186,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 193,
+      "passos_totais": 40,
+      "descansos_realizados": 7,
+      "combate": {
+        "inimigos_derrotados": 9,
+        "fugas": 0
+      },
+      "eventos": {
+        "baus_abertos": 1,
+        "fontes_usadas": 4,
+        "charadas_acertadas": 0,
+        "charadas_erradas": 1
+      }
+    }
+  },
+  {
+    "horario": "2025-12-02T20:19:00",
+    "nome": "Astevaldo",
+    "classe": "Guerreiro",
+    "pontos": 215,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 345,
+      "passos_totais": 44,
+      "descansos_realizados": 0,
+      "nivel_final": 2,
+      "experiencia_total_ganha": 196,
+      "niveis_ganhos": 1,
+      "combate": {
+        "inimigos_derrotados": 9,
+        "fugas": 1,
+        "criticos_acertados": 2,
+        "criticos_sofridos": 1,
+        "desvios": 4,
+        "falhas_criticas_jogador": 3,
+        "falhas_criticas_inimigos": 5,
+        "habilidades_usadas": 12,
+        "magias_lancadas": 0,
+        "habilidades_desbloqueadas": 2
+      },
+      "eventos": {
+        "baus_abertos": 3,
+        "fontes_usadas": 2,
+        "charadas_acertadas": 0,
+        "charadas_erradas": 1
+      }
+    }
+  },
+  {
+    "horario": "2025-12-02T20:24:18",
+    "nome": "Supremuigu",
+    "classe": "Mago",
+    "pontos": 24,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 161,
+      "passos_totais": 11,
+      "descansos_realizados": 0,
+      "nivel_final": 1,
+      "experiencia_total_ganha": 0,
+      "niveis_ganhos": 0,
+      "combate": {
+        "inimigos_derrotados": 0,
+        "fugas": 0,
+        "criticos_acertados": 0,
+        "criticos_sofridos": 0,
+        "desvios": 0,
+        "falhas_criticas_jogador": 0,
+        "falhas_criticas_inimigos": 0,
+        "habilidades_usadas": 3,
+        "magias_lancadas": 3,
+        "habilidades_desbloqueadas": 1
+      },
+      "eventos": {
+        "baus_abertos": 1,
+        "fontes_usadas": 0,
+        "charadas_acertadas": 0,
+        "charadas_erradas": 0
+      }
+    }
+  },
+  {
+    "horario": "2025-12-02T21:04:27",
+    "nome": "Otavio",
+    "classe": "Guerreiro",
+    "pontos": 240,
+    "metricas_bi": {
+      "tempo_sessao_segundos": 286,
+      "passos_totais": 34,
+      "descansos_realizados": 22,
+      "nivel_final": 3,
+      "experiencia_total_ganha": 300,
+      "niveis_ganhos": 2,
+      "combate": {
+        "inimigos_derrotados": 11,
+        "fugas": 1,
+        "criticos_acertados": 6,
+        "criticos_sofridos": 7,
+        "desvios": 15,
+        "falhas_criticas_jogador": 3,
+        "falhas_criticas_inimigos": 3,
+        "habilidades_usadas": 16,
+        "magias_lancadas": 0,
+        "habilidades_desbloqueadas": 3
+      },
+      "eventos": {
+        "baus_abertos": 3,
+        "fontes_usadas": 0,
+        "charadas_acertadas": 1,
+        "charadas_erradas": 1
+      }
+    }
   }
 ]
